@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                       String           @id @default(uuid())
+  username                 String           @unique
+  firstName                String           @db.VarChar(50)
+  lastName                 String           @db.VarChar(50)
+  password                 String           @db.VarChar(100)
+  chats                    ChatMember[]
+  messages                 Message[]
+  reactions                MessageReaction[]
+  readReceipts             ReadReceipt[]
+  friendRequestsSent       FriendRequest[]  @relation("FriendRequestsSent")
+  friendRequestsReceived   FriendRequest[]  @relation("FriendRequestsReceived")
+  friends                  Friend[]         @relation("UserFriends")
+  friendsInverse           Friend[]         @relation("FriendUsers") // Inverse relation
+  createdAt                DateTime         @default(now())
+
+  @@map("users")
+}
+
+model Friend {
+  id        String  @id @default(uuid())
+  userId    String
+  friendId  String
+  user      User    @relation(name: "UserFriends", fields: [userId], references: [id], onDelete: Cascade)
+  friend    User    @relation(name: "FriendUsers", fields: [friendId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, friendId]) // Ensure each friend relation is unique
+  @@map("friends")
+}
+
+model Chat {
+  id          String        @id @default(uuid())
+  groupName   String?       @db.VarChar(50)
+  members     ChatMember[]
+  messages    Message[]
+  createdAt   DateTime      @default(now())
+
+  @@map("chats")
+}
+
+model ChatMember {
+  id        String    @id @default(uuid())
+  userId    String
+  chatId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chat      Chat      @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  joinedAt  DateTime  @default(now())
+
+  @@unique([userId, chatId]) // Ensures a user is not in the same chat twice
+  @@map("chatmembers")
+}
+
+model Message {
+  id            String             @id @default(uuid())
+  text          String
+  userId        String
+  chatId        String
+  user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chat          Chat               @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  reactions     MessageReaction[]
+  readReceipts  ReadReceipt[]
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  @@map("messages")
+}
+
+model MessageReaction {
+  id          String    @id @default(uuid())
+  messageId   String    
+  userId      String
+  emoji       String    // Store emoji reactions (e.g., "❤️", "😂", "👍")
+  message     Message   @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+
+  @@unique([messageId, userId, emoji]) // Prevent duplicate reactions by the same user
+  @@map("messagereactions")
+}
+
+model ReadReceipt {
+  id          String    @id @default(uuid())
+  messageId   String
+  userId      String
+  message     Message   @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  readAt      DateTime  @default(now())
+
+  @@unique([messageId, userId]) // Ensures each user has only one read receipt per message
+  @@map("readreceipts")
+}
+
+model FriendRequest {
+  id              String    @id @default(uuid())
+  senderId        String
+  receiverId      String
+  status          FriendRequestStatus
+  sender          User      @relation("FriendRequestsSent", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver        User      @relation("FriendRequestsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([senderId, receiverId]) // Ensure unique friend requests between users
+  @@map("friendrequests")
+}
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
