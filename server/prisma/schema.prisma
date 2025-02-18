@@ -8,33 +8,20 @@ datasource db {
 }
 
 model User {
-  id                       String           @id @default(uuid())
-  username                 String           @unique
-  firstName                String           @db.VarChar(50)
-  lastName                 String           @db.VarChar(50)
-  password                 String           @db.VarChar(100)
-  chats                    ChatMember[]
-  messages                 Message[]
-  reactions                MessageReaction[]
-  readReceipts             ReadReceipt[]
-  friendRequestsSent       FriendRequest[]  @relation("FriendRequestsSent")
-  friendRequestsReceived   FriendRequest[]  @relation("FriendRequestsReceived")
-  friends                  Friend[]         @relation("UserFriends")
-  friendsInverse           Friend[]         @relation("FriendUsers") // Inverse relation
-  createdAt                DateTime         @default(now())
+  id                     String           @id @default(uuid())
+  username               String           @unique
+  firstName              String           @db.VarChar(50)
+  lastName               String           @db.VarChar(50)
+  password               String           @db.VarChar(100)
+  chats                  ChatMember[]
+  messages               Message[]
+  reactions              MessageReaction[]
+  readReceipts           ReadReceipt[]
+  friendRequestsSent     FriendRequest[]  @relation("FriendRequestsSent")
+  friendRequestsReceived FriendRequest[]  @relation("FriendRequestsReceived")
+  createdAt              DateTime         @default(now())
 
   @@map("users")
-}
-
-model Friend {
-  id        String  @id @default(uuid())
-  userId    String
-  friendId  String
-  user      User    @relation(name: "UserFriends", fields: [userId], references: [id], onDelete: Cascade)
-  friend    User    @relation(name: "FriendUsers", fields: [friendId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, friendId]) // Ensure each friend relation is unique
-  @@map("friends")
 }
 
 model Chat {
@@ -78,7 +65,7 @@ model MessageReaction {
   id          String    @id @default(uuid())
   messageId   String    
   userId      String
-  emoji       String    // Store emoji reactions (e.g., "❤️", "😂", "👍")
+  emoji       String
   message     Message   @relation(fields: [messageId], references: [id], onDelete: Cascade)
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
