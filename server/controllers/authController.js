@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-const { generateToken } = require("../utils/auth");
+const { generateToken } = require("../config/auth");
 const CustomError = require("../utils/customError");
 
 const getCurrentUser = asyncHandler(async (req, res) => {

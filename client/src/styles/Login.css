@@ -1,0 +1,24 @@
+#login {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  font-size: 1.5rem;
+}
+
+#login input {
+  font-size: inherit;
+  font-family: inherit;
+  margin-bottom: 20px;
+  min-width: 600px;
+}
+
+#login label {
+  display: flex;
+}
+
+#login button {
+  font-size: 1.25rem;
+  padding: 10px 40px;
+  margin: 10px 0;
+}

@@ -2,7 +2,7 @@ const { Router } = require("express");
 const chatRouter = Router();
 const chatController = require("../controllers/chatController");
 const messageController = require("../controllers/messageController");
-const { authenticateToken } = require("../utils/auth");
+const { authenticateToken } = require("../config/auth");
 
 //Chats
 chatRouter.post("/", authenticateToken, chatController.createChat);

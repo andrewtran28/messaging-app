@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+body {
+  --background: #f3f3f3;
+  --font-dark: #2f2620;
+  --font-light: #E0E5E9;
+  --accent: #f3D849;
+  --link: #0A62D0;
+  --header: #191718;
+
+  background-color: var(--background);
+  font-family: "Outfit", Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+#page-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: space-between;
+}
+
+#title {
+  font-size: 4rem;
+  line-height: 4rem;;
+  margin: 30px 0 10px 0;
+}
+
+main {
+  background-color: #f3f3f3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+
+}
+
+section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px 0;
+}
+
+hr {
+  width: 100%;
+}
+
+p {
+  margin: 10px 0;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+a:hover {
+  color: #0c77fa;
+}
+
+button {
+  background-color: var(--accent);
+  color: var(--font-dark);
+  font-family: "Outfit", Arial, sans-serif;
+  font-size: 1rem;
+  border: 1px solid var(--font-dark);
+  padding: 10px;
+
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+button:hover {
+  background-color: #d4bb3f;
+}
+button:active {
+  background-color: #a59230;
+}
+
+.prevent-select {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}

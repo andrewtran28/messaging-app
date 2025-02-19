@@ -1,0 +1,30 @@
+#home {
+  font-size: 1.25rem;
+}
+
+#home h1 {
+  font-size: 4rem;
+  line-height: 4rem;;
+  margin: 30px 0;
+}
+
+#home h2 {
+  margin: 5px 0;
+  font-size: 2rem;
+  line-height: 2rem;;
+}
+
+#home h3 {
+  margin: 10px 0;
+}
+
+.home-header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.post {
+  margin-bottom: 40px;
+}

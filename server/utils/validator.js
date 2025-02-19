@@ -4,6 +4,16 @@ const CustomError = require("./customError");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+const capitalizeFirstLetter = (value) => {
+  if (typeof value === "string" && value.length > 0) {
+    return value
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitalize each word
+      .join(" ");
+  }
+  return value;
+};
+
 const signupValidator = [
   body("username")
     .trim()
@@ -25,17 +35,24 @@ const signupValidator = [
   body("firstName")
     .trim()
     .notEmpty()
+    .withMessage("First name is required.")
     .matches(/^[a-zA-Z ]*$/)
-    .withMessage("Name should only contain letters.")
+    .withMessage("First name should only contain letters.")
     .bail()
     .isLength({ min: 1, max: 25 })
-    .bail(),
+    .withMessage("First name must be between 1-25 characters.")
+    .bail()
+    .customSanitizer(capitalizeFirstLetter), // Capitalize each word in firstName
   body("lastName")
     .trim()
+    .notEmpty()
+    .withMessage("Last name is required.")
     .matches(/^[a-zA-Z ]*$/)
-    .withMessage("Name should only contain letters.")
+    .withMessage("Last name should only contain letters.")
     .isLength({ min: 1, max: 25 })
-    .bail(),
+    .withMessage("Last name must be between 1-25 characters.")
+    .bail()
+    .customSanitizer(capitalizeFirstLetter),
   body("password").trim().isLength({ min: 6, max: 50 }).withMessage("Password must be between 6-50 characters.").bail(),
   body("confirmPassword")
     .trim()
@@ -51,6 +68,7 @@ const signupValidator = [
 const handleValidationErrors = (req) => {
   const result = validationResult(req);
   if (!result.isEmpty()) {
+    console.log("Validation Errors:", result.errors);
     const errorMessages = result.errors.map((err) => (err.param ? `${err.msg} (${err.param})` : err.msg));
     throw new CustomError(401, `${errorMessages.join(" ")}`);
   }
@@ -60,3 +78,8 @@ module.exports = {
   signupValidator,
   handleValidationErrors,
 };
+
+
+
+
+
