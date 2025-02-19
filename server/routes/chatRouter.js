@@ -6,6 +6,7 @@ const { authenticateToken } = require("../config/auth");
 
 //Chats
 chatRouter.post("/", authenticateToken, chatController.createChat);
+chatRouter.post("/check", authenticateToken, chatController.checkExistingChat);
 chatRouter.get("/:chatId", authenticateToken, chatController.getChat);
 chatRouter.put("/:chatId", authenticateToken, chatController.updateChat);
 chatRouter.delete("/:chatId", authenticateToken, chatController.deleteChat);

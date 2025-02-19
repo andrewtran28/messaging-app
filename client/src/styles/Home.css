@@ -25,6 +25,18 @@
   align-items: center;
 }
 
-.post {
-  margin-bottom: 40px;
+.user {
+  position: relative;
+  padding: 10px;
+  border: 1px solid red;
+}
+
+.actions {
+  display: none;
+  position: absolute;
+  padding: 5px;
+  border-radius: 5px;
+}
+.user:hover .actions {
+  display: block;
 }

@@ -5,13 +5,13 @@ import "./styles/App.css";
 
 import Header from "./components/Header";
 import Home from "./pages/Home";
+import Chat from "./pages/Chat";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ErrorPage from "./pages/ErrorPage";
 // import Footer from "./components/Footer";
 
 function App() {
-
   return (
     <>
       <AuthProvider>
@@ -24,6 +24,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
+                  <Route path="/chat/:chatId" element={<Chat />} />
                   {/* <Route path="/users/" element={<ProtectedRoute element={<UserPage />} />} /> */}
                   <Route path="*" element={<ErrorPage />} />
                 </Routes>
@@ -33,9 +34,8 @@ function App() {
           </div>
         </Router>
       </AuthProvider>
-
     </>
-  )
+  );
 }
 
 export default App

@@ -10,10 +10,9 @@ function Header() {
       <div id="header-cont">
         <div className="header-left">
           <Link to="/" className="logo">
-            <img className="logo-img" src="/logo.png" />
-            Buhlog
+            {/* <img className="logo-img" src="/logo.png" /> */}
+            Babble-On
           </Link>
-          <span className="pronunciation prevent-select">(/bla:g/)</span>
         </div>
 
         <nav>

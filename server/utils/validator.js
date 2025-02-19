@@ -64,7 +64,7 @@ const signupValidator = [
     }),
 ];
 
-//Helper funciton for any API route that requires validator.
+//Helper function for any API route that requires validator.
 const handleValidationErrors = (req) => {
   const result = validationResult(req);
   if (!result.isEmpty()) {
