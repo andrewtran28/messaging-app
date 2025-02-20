@@ -4,6 +4,58 @@ const CustomError = require("../utils/customError");
 const { handleValidationErrors } = require("../utils/validator");
 const prisma = new PrismaClient();
 
+const getUserChats = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const chats = await prisma.chat.findMany({
+      where: {
+        members: {
+          some: { userId }, // Find chats where the user is a member
+        },
+      },
+      include: {
+        members: {
+          include: { user: { select: { id: true, username: true } } }, // Fetch user details
+        },
+        messages: {
+          orderBy: { createdAt: "desc" },
+          take: 1,
+          include: {
+            user: { select: { username: true } }, // Include message sender's username
+          },
+        },
+      },
+    });
+
+    // Format response to include lastMessage, sender, and timestamp
+    const formattedChats = chats.map((chat) => {
+      const otherMembers = chat.members
+        .filter((m) => m.user.id !== userId) // Exclude logged-in user
+        .map((m) => m.user.username)
+        .join(", ");
+
+      const lastMessage = chat.messages[0] || null;
+
+      return {
+        id: chat.id,
+        chatName: chat.groupName || otherMembers || "Unnamed Chat", // Use groupName if available
+        lastMessage: lastMessage ? lastMessage.text : "No messages yet",
+        lastMessageSender: lastMessage ? lastMessage.user.username : null, // Include sender username
+        lastMessageAt: lastMessage ? lastMessage.createdAt : chat.createdAt, // Use createdAt if no messages
+      };
+    });
+
+    // Sort chats by lastMessageAt (most recent first)
+    formattedChats.sort((a, b) => new Date(b.lastMessageAt) - new Date(a.lastMessageAt));
+
+    res.json(formattedChats);
+  } catch (error) {
+    console.error("Error fetching user chats:", error);
+    res.status(500).json({ message: "Failed to fetch chats." });
+  }
+};
+
 const checkExistingChat = asyncHandler(async (req, res) => {
   const userId = req.user.id; // Authenticated user
   const { recipientId } = req.body; // The user they want to chat with
@@ -28,7 +80,6 @@ const checkExistingChat = asyncHandler(async (req, res) => {
     return res.status(200).json({ chatId: null });
   }
 
-  console.log("Chat does exist.");
   res.status(200).json({ chatId: chat.id });
 });
 
@@ -65,7 +116,11 @@ const getChat = asyncHandler(async (req, res) => {
           user: { select: { id: true, username: true } },
         },
       },
-      messages: true,
+      messages: {
+        include: {
+          user: { select: { id: true, username: true, firstName: true, lastName: true } },
+        },
+      },
     },
   });
 
@@ -73,17 +128,7 @@ const getChat = asyncHandler(async (req, res) => {
     throw new CustomError(404, "Chat not found");
   }
 
-  // Transform response to simplify frontend
-  const formattedChat = {
-    id: chat.id,
-    members: chat.members.map((member) => ({
-      id: member.user.id,
-      username: member.user.username,
-    })),
-    messages: chat.messages,
-  };
-
-  res.json(formattedChat);
+  res.json(chat);
 });
 
 const updateChat = asyncHandler(async (req, res) => {
@@ -107,6 +152,7 @@ const deleteChat = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  getUserChats,
   checkExistingChat,
   createChat,
   getChat,

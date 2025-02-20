@@ -29,7 +29,6 @@ function Login() {
         login(data.token); // Store token in sessionStorage
         navigate("/"); // Redirect to home
       } else {
-        console.error("Login failed:", data);
         setErrorMessage(data.message);
         setUsername("");
         setPassword("");

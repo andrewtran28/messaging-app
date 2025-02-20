@@ -5,11 +5,13 @@ const messageController = require("../controllers/messageController");
 const { authenticateToken } = require("../config/auth");
 
 //Chats
+chatRouter.get("/", authenticateToken, chatController.getUserChats);
 chatRouter.post("/", authenticateToken, chatController.createChat);
 chatRouter.post("/check", authenticateToken, chatController.checkExistingChat);
 chatRouter.get("/:chatId", authenticateToken, chatController.getChat);
 chatRouter.put("/:chatId", authenticateToken, chatController.updateChat);
 chatRouter.delete("/:chatId", authenticateToken, chatController.deleteChat);
+
 
 //Messages
 chatRouter.post("/:chatId/messages", authenticateToken, messageController.sendMessage);

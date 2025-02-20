@@ -5,17 +5,22 @@ const CustomError = require("../utils/customError");
 
 const sendMessage = asyncHandler(async (req, res) => {
   const { chatId } = req.params;
-  const { text } = req.body;
-  const userId = req.user.id;
+  const { userId, text } = req.body;
 
-  if (!text) throw new CustomError(400, "Message text is required");
+  if (!text) throw new CustomError(400, "Message content is required.");
 
   const message = await prisma.message.create({
-    data: { text, chatId, userId },
-    include: { user: true },
+    data: {
+      chatId,
+      userId,
+      text,
+    },
+    include: {
+      user: { select: { id: true, username: true } }, // Include user data
+    },
   });
 
-  res.status(201).json(message);
+  res.status(201).json({ message });
 });
 
 const getMessages = asyncHandler(async (req, res) => {
