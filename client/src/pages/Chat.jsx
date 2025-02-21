@@ -15,7 +15,7 @@ function Chat() {
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
-  const [isAddMembersOpen, setIsAddMembersOpen] = useState(false); // State to control AddMembers modal
+  const [isAddMembersOpen, setIsAddMembersOpen] = useState(false);
 
   useEffect(() => {
     if (!user || !token) {
@@ -39,6 +39,8 @@ function Chat() {
         } else {
           setErrorMessage(data.message || "Failed to fetch chat members.");
         }
+
+        console.log(members);
       } catch (error) {
         console.error("Error fetching chat:", error);
         setErrorMessage("An error occurred while fetching chat details.");

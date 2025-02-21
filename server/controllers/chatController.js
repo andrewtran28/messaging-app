@@ -39,14 +39,13 @@ const getUserChats = async (req, res) => {
 
       return {
         id: chat.id,
-        chatName: chat.groupName || otherMembers || "Unnamed Chat", // Use groupName if available
+        chatName: chat.groupName || otherMembers, // Use groupName if available
         lastMessage: lastMessage ? lastMessage.text : "No messages yet",
         lastMessageSender: lastMessage ? lastMessage.user.username : null, // Include sender username
         lastMessageAt: lastMessage ? lastMessage.createdAt : chat.createdAt, // Use createdAt if no messages
       };
     });
 
-    // Sort chats by lastMessageAt (most recent first)
     formattedChats.sort((a, b) => new Date(b.lastMessageAt) - new Date(a.lastMessageAt));
 
     res.json(formattedChats);
@@ -59,17 +58,18 @@ const getUserChats = async (req, res) => {
 const checkExistingChat = asyncHandler(async (req, res) => {
   const userId = req.user.id; // Authenticated user
   const { recipientId } = req.body; // The user they want to chat with
+
   if (!recipientId) throw new CustomError(400, "Recipient ID is required");
 
   if (userId === recipientId) throw new CustomError(400, "You cannot start a chat with yourself.");
 
   const chat = await prisma.chat.findFirst({
     where: {
-      members: {
-        every: { userId: { in: [userId, recipientId] } },
-        some: { userId: userId },
-        some: { userId: recipientId },
-      },
+      AND: [
+        { members: { some: { userId } } }, // Ensure user is in chat
+        { members: { some: { userId: recipientId } } }, // Ensure recipient is in chat
+        { members: { every: { userId: { in: [userId, recipientId] } } } }, // Ensure no extra users
+      ],
     },
     include: {
       members: true,

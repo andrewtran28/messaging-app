@@ -14,11 +14,10 @@ function AddMembers({ currentMembers, onClose, onCreateGroupChat }) {
     const fetchUsers = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/users`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         const data = await response.json();
+
         if (response.ok) {
           setUsers(data);
         } else {
@@ -35,17 +34,36 @@ function AddMembers({ currentMembers, onClose, onCreateGroupChat }) {
 
   const handleCheckboxChange = (userId) => {
     setSelectedUsers((prevSelected) =>
-      prevSelected.includes(userId)
-        ? prevSelected.filter((id) => id !== userId)
-        : [...prevSelected, userId]
+      prevSelected.includes(userId) ? prevSelected.filter((id) => id !== userId) : [...prevSelected, userId]
     );
   };
 
-  const handleCreateGroupChat = async () => {
+  const handleCreateChat = async () => {
     try {
-      // Combine current chat members with the newly selected users
-      const allUserIds = [...currentMembers.map((member) => member.userId), ...selectedUsers];
+      const allUserIds = [...new Set([...currentMembers.map((member) => member.userId), ...selectedUsers])];
 
+      if (selectedUsers.length === 1 && allUserIds.length <= 2) {
+        const otherUserId = selectedUsers[0];
+
+        const checkResponse = await fetch(`${API_BASE_URL}/api/chat/check`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ recipientId: otherUserId }),
+        });
+
+        const checkData = await checkResponse.json();
+
+        if (checkResponse.ok && checkData.chatId) {
+          onClose();
+          onCreateGroupChat(checkData.chatId);
+          return;
+        }
+      }
+
+      // Create a new chat if a 1-on-1 chat doesn't exist or if it's a group chat
       const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: "POST",
         headers: {
@@ -56,26 +74,29 @@ function AddMembers({ currentMembers, onClose, onCreateGroupChat }) {
       });
 
       const data = await response.json();
+      console.log("Chat creation response:", data); // Debugging
 
-      if (response.ok) {
-        onCreateGroupChat(data.chatId); // Notify parent to update state
-        onClose(); // Close the modal or dialog
+      if (response.ok && data.id) {
+        onClose();
+        onCreateGroupChat(data.id);
       } else {
         setErrorMessage(data.message || "Failed to create group chat.");
       }
     } catch (error) {
       console.error("Error creating group chat:", error);
-      setErrorMessage("An error occurred while creating group chat.");
+      setErrorMessage("An error occurred while creating the group chat.");
     }
   };
 
-  const filteredUsers = users.filter((user) =>
-    user.username.toLowerCase().includes(searchTerm.toLowerCase()) && !currentMembers.some((member) => member.userId === user.id)
+  const filteredUsers = users.filter(
+    (user) =>
+      user.username.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      !currentMembers.some((member) => member.userId === user.id)
   );
 
   return (
     <div className="add-members-modal">
-      <h2>Add Members</h2>
+      <h2>Create New Chat</h2>
 
       <input
         type="text"
@@ -105,7 +126,7 @@ function AddMembers({ currentMembers, onClose, onCreateGroupChat }) {
         )}
       </ul>
 
-      <button onClick={handleCreateGroupChat}>Create Group Chat</button>
+      <button onClick={handleCreateChat}>Create Chat</button>
       <button onClick={onClose}>Cancel</button>
     </div>
   );

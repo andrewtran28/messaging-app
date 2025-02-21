@@ -35,7 +35,7 @@ const formatDateTime = (date) => {
     const month = new Intl.DateTimeFormat("en-US", options).format(dateObj);
     const day = dateObj.getDate();
     const year = dateObj.getFullYear();
-    return `${month} ${day} ${year} AT ${hours}:${minutes}${ampm}`;
+    return `${month} ${day} ${year} @ ${hours}:${minutes}${ampm}`;
   }
 };
 
