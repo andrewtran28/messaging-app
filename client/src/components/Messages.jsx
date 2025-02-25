@@ -3,7 +3,7 @@ import { formatDateTime } from "../utils/FormatDate";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function Messages({ messages, chatId, user, token, setMessages }) {
+function Messages({ messages, chatId, user, token, setMessages, members }) {
   const [newMessage, setNewMessage] = useState("");
   const [lastReadMessages, setLastReadMessages] = useState({});
   const messagesContainerRef = useRef(null);
@@ -81,10 +81,7 @@ function Messages({ messages, chatId, user, token, setMessages }) {
               const isLastReadForUser = Object.values(lastReadMessages).includes(message.id);
 
               return (
-                <li 
-                  className={`message ${isSender ? "you" : ""}`} 
-                  key={message.id}
-                >
+                <li className={`message ${isSender ? "you" : ""}`} key={message.id}>
                   <div className="message-content">
                     <strong>{isSender ? "You" : message.user.username}:</strong> {message.text}
                     <span className={`message-time ${isLastMessage ? "visible" : "hidden"}`}>
@@ -96,9 +93,20 @@ function Messages({ messages, chatId, user, token, setMessages }) {
                     <div className="user-read">
                       {Object.entries(lastReadMessages)
                         .filter(([_, msgId]) => msgId === message.id)
-                        .map(([userId]) => (
-                          <span key={userId}>{messages.find((m) => m.user.id === userId)?.user.username} </span>
-                        ))}
+                        .map(([userId]) => {
+                          const member = members.find((m) => m.userId === userId);
+                          return (
+                            <span key={userId}>
+                              {member && (
+                                <img
+                                  className="read-profile"
+                                  src={member.user.profileIcon}
+                                  title={member.user.username}
+                                />
+                              )}
+                            </span>
+                          );
+                        })}
                     </div>
                   )}
                 </li>
@@ -109,16 +117,19 @@ function Messages({ messages, chatId, user, token, setMessages }) {
       </div>
 
       <div className="message-input">
-        <input 
+        <input
           id="input-text"
-          type="text" 
-          value={newMessage} 
-          onChange={(e) => setNewMessage(e.target.value)} 
+          type="text"
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
           maxLength="2048"
           placeholder="Aa"
-          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()} 
+          autoComplete="off"
+          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
         />
-        <button id="btn-send" onClick={handleSendMessage}>Send</button>
+        <button id="btn-send" onClick={handleSendMessage}>
+          Send
+        </button>
       </div>
     </>
   );

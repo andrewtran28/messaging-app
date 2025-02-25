@@ -41,9 +41,23 @@ header {
 }
 
 .header-right {
+  display:flex;
+  flex-direction: column;
   text-align: end;
   font-size: 2rem;
   margin: 0 10px;
+
+}
+
+.header-account {
+  display: flex;
+  align-items: center;
+}
+
+.header-profile {
+  height: 2.5rem;
+  margin: 0 10px;
+  /* border: 1px solid red; */
 }
 
 .header-right button {

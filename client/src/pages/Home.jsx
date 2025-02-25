@@ -17,14 +17,21 @@ function Home() {
         </>
       )}
       <div id="page-layout">
-        <UsersList />
-        <button onClick={() => setIsAddMembersOpen(true)}>Create New Chat</button>
-        {isAddMembersOpen && (
-          <CreateChat
-            currentMembers={[{ userId: user.id, username: user.username }]} // Include logged-in user by default
-            onClose={() => setIsAddMembersOpen(false)}
-          />
-        )}
+        <div className="user-directory">
+          <UsersList />
+          {user && (
+            <button className="btn-create-chat" onClick={() => setIsAddMembersOpen(true)}>
+              Create New Chat
+            </button>
+          )}
+
+          {isAddMembersOpen && (
+            <CreateChat
+              currentMembers={[{ userId: user.id, username: user.username }]}
+              onClose={() => setIsAddMembersOpen(false)}
+            />
+          )}
+        </div>
       </div>
     </>
   );

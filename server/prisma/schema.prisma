@@ -13,6 +13,7 @@ model User {
   firstName              String           @db.VarChar(30)
   lastName               String           @db.VarChar(30)
   password               String           @db.VarChar(100)
+  profileIcon            String           @db.VarChar(100) @default("/profile/default.png")
   chats                  ChatMember[]
   messages               Message[]
   reactions              MessageReaction[]

@@ -7,8 +7,12 @@ const { authToken } = require("../config/auth");
 //User Routing
 usersRouter.get("/", usersController.getAllUsers);
 usersRouter.post("/", signupValidator, usersController.createUser);
-usersRouter.get("/:userId", authToken, usersController.getUserInfo);
-usersRouter.delete("/:userId", authToken, usersController.deleteUser);
+usersRouter.get("/:username", usersController.getUserInfo);
+usersRouter.put("/:username", authToken, usersController.updateProfile);
+usersRouter.delete("/:username", authToken, usersController.deleteUser);
+
+//Chats
+usersRouter.get("/:userId/chats", authToken, usersController.getChats);
 
 //Friends & Friend Requests
 /*
@@ -20,8 +24,5 @@ usersRouter.get("/:userId/friends/requests", authToken, usersController.getFrien
 usersRouter.patch("/:userId/friends/:friendId", authToken, usersController.acceptFriendRequest);
 usersRouter.delete("/:userId/friend/requests/:requestId", authToken, usersController.declineFriendRequest);
 */
-
-//Chats
-usersRouter.get("/:userId/chats", authToken, usersController.getChats);
 
 module.exports = usersRouter;

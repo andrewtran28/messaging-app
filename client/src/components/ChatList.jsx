@@ -59,23 +59,32 @@ function ChatList() {
 
       <div className="chats">
         {chats.length === 0 ? (
-          <p>You have no active chats.</p>
+          <p className="no-chats">You have no active chats.</p>
         ) : (
           <ul>
             {chats.map((chat) => {
               const isUnread = chat.lastMessage && !chat.lastMessageReadBy?.includes(user.id);
+              const otherParticipant = !chat.isGroup ? chat.members.find((member) => member.id !== user.id) : null;
+
               return (
                 <li key={chat.id} className="chat">
-                  <Link to={`/chat/${chat.id}`}>
-                    <span className="chat-name">{chat.chatName || "Unnamed Chat"}</span>
-                  </Link>
-                  <p
-                    className="chat-preview"
-                    style={{ color: isUnread ? "black" : "inherit", fontWeight: isUnread ? "600" : "400" }}
-                  >
-                    {chat.lastMessageSender && `${chat.lastMessageSender}: `}
-                    {truncateMessage(chat.lastMessage)}
-                  </p>
+                  {!chat.isGroup && otherParticipant && (
+                    <img className="chatlist-profile" src={otherParticipant.profileIcon} alt="Profile" />
+                  )}
+                  <div>
+                    <Link to={`/chat/${chat.id}`}>
+                      <span className="chat-name">
+                        {chat.isGroup ? chat.chatName : otherParticipant?.username || "Unnamed Chat"}
+                      </span>
+                    </Link>
+                    <p
+                      className="chat-preview"
+                      style={{ color: isUnread ? "black" : "inherit", fontWeight: isUnread ? "600" : "400" }}
+                    >
+                      {chat.lastMessageSender && `${chat.lastMessageSender}: `}
+                      {truncateMessage(chat.lastMessage)}
+                    </p>
+                  </div>
                   <span className="timestamp">{formatDateTime(chat.lastMessageAt)}</span>
                 </li>
               );

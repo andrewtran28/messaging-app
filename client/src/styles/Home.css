@@ -1,27 +1,42 @@
-#userlist-cont {
-  padding: 0 20px;
+#userlist-cont h2 {
+  background-color: var(--message);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  padding: 26px 20px;
+  margin: 0 0 20px 0;
 }
 
 .user-search {
-  border-radius: 1rem;
-  line-height: 1.5rem;
-  font-size: 1.25rem;
-  padding: 0 10px;
-  margin: 10px 0;
+  border: 1px solid gray;
+  border-radius: 2rem;
+  line-height: 2rem;
+  font-size: 1.5rem;
+  padding: 5px 20px;
+  margin: 10px 20px;
 }
 
 .user-list {
-  max-height: calc( 100vh - 300px);
+  max-height: calc( 100vh - 310px - 2rem);
   overflow-y: auto;
   line-height: 2rem;
+  padding: 0 20px;
 }
 
 .user {
   display: flex;
   justify-content: space-between;
   width: fit-content;
-  min-width: 300px;
+  min-width: 350px;
   padding: 5px;
+}
+
+.user-cont {
+  display: flex;
+}
+
+.user-profile {
+  height: 2rem;
+  margin-right: 10px;
 }
 
 .chat-btn {
@@ -39,4 +54,10 @@
   font-size: 1rem;
   font-style: oblique;
   color: gray;
+}
+
+.btn-create-chat {
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }

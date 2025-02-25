@@ -13,6 +13,12 @@
   color: var(--font-light);
 }
 
+.chat-cont p {
+color: gray;
+font-style: oblique;
+margin: 20px;
+}
+
 .chat-header {
   background-color: var(--header);
   border-top-left-radius: 1rem;
@@ -23,8 +29,24 @@
   align-items: center;
 }
 
+.chat-header h1 {
+  display: flex;
+  align-items: center;
+}
+
+.chat-profile {
+  height: 2.5rem;
+  margin-right: 10px;
+}
+
+.chat-full-name {
+  margin: 0 10px;
+  color: var(--message);
+  font-weight: 300;
+  font-size: 1.25rem;
+}
+
 .messages-cont {
-  /* border: 1px solid red; */
   background-color: var(--container);
   width: 100%;
   height: calc(100vh - 300px - 2rem);
@@ -74,9 +96,12 @@
 .user-read {
   position: absolute;
   right: 10px;
-  bottom: 3px;
-  font-size: 0.75rem;
-  color: gray;
+  bottom: 0;
+}
+
+.read-profile {
+  height: 0.8rem;
+  margin-left: 3px;
 }
 
 .message-input {
@@ -85,7 +110,6 @@
 }
 
 #input-text {
-  /* margin: 0 20px; */
   padding: 0 15px;
   width: 100%;
   line-height: 2rem;
@@ -100,43 +124,6 @@
   border-radius: 0;
   border-top-right-radius: 2rem;
   border-bottom-right-radius: 2rem;
-}
-
-.add-members {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: gray;
-  z-index: 3;
-  right: 0;
-  top: 20px;
-  padding: 20px;
-  max-height: 400px;
-  width: 500px;
-  border-radius: 1rem;
-}
-
-.add-members h2{
-  margin: 0 0 10px 0;
-}
-
-.add-members ul {
-  padding: 0;
-  margin: 10px 0;
-  width: 100%;
-  text-align: left;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
- .search {
-  border: 1px solid gray;
-  width: calc(100% - 10px);
-  border-radius: 1rem;
-  line-height: 2rem;
-  padding-left: 10px;
-  margin: 10px 0;
 }
 
 #btn-leave:hover {

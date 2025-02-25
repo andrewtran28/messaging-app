@@ -114,37 +114,39 @@ function UsersList() {
         type="text"
         value={searchTerm}
         onChange={handleSearchChange}
-        placeholder="Search by username..."
+        placeholder="Search by username"
       />
-
-      {filteredUsers.length === 0 ? (
-        <p>No users found.</p>
-      ) : (
-        <div className="user-list">
-          {filteredUsers.map((u) => (
-            <div
-              key={u.id}
-              className="user"
-              onMouseEnter={() => setHoveredUser(u.id)}
-              onMouseLeave={() => setHoveredUser(null)}
-            >
-              <div className="user-cont">
-                <span className="username">
-                  <Link to={`/user/${u.username}`}>{u.username}</Link>
-                </span>
-                <span className="full-name">
-                  ({u.firstName} {u.lastName})
-                </span>
+      <div className="user-list">
+        {filteredUsers.length === 0 ? (
+          <p>No users found.</p>
+        ) : (
+          <>
+            {filteredUsers.map((u) => (
+              <div
+                key={u.id}
+                className="user"
+                onMouseEnter={() => setHoveredUser(u.id)}
+                onMouseLeave={() => setHoveredUser(null)}
+              >
+                <div className="user-cont">
+                  <img className="user-profile" src={u.profileIcon} />
+                  <span className="username">
+                    <Link to={`/user/${u.username}`}>{u.username}</Link>
+                  </span>
+                  <span className="full-name">
+                    ({u.firstName} {u.lastName})
+                  </span>
+                </div>
+                {user && user.id !== u.id && hoveredUser === u.id && (
+                  <button className="chat-btn" onClick={() => handleChat(u.id)}>
+                    Chat
+                  </button>
+                )}
               </div>
-              {user && user.id !== u.id && hoveredUser === u.id && (
-                <button className="chat-btn" onClick={() => handleChat(u.id)}>
-                  Chat
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </>
+        )}
+      </div>
     </section>
   );
 }

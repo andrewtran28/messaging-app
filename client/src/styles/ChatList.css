@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
   margin: 10px 10px 10px 20px;
   border-radius: 1rem;
 }
@@ -16,9 +16,14 @@
   margin: 0 0 20px 0;
 }
 
+.no-chats {
+margin: 0 20px;
+}
+
 .chats {
-  min-height: calc(100vh - 280px);
+  max-height: calc(100vh - 280px);
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .chatlist ul {
@@ -31,7 +36,14 @@
   font-size: 1.15rem;
   color: rgb(105, 105, 105);
   position: relative;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.chatlist-profile {
+  height: 2rem;
+  margin: 0 5px 10px 0;
 }
 
 .chat-name {
@@ -41,7 +53,8 @@
 
 .chat-preview {
   margin: 0 0 10px 0;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  text-wrap: nowrap;
 }
 
 .timestamp {

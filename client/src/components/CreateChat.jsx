@@ -6,7 +6,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function CreateChat({ currentMembers, onClose }) {
   const navigate = useNavigate();
-  const { token } = useAuth();
+  const { user, token } = useAuth();
   const [users, setUsers] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -119,7 +119,6 @@ function CreateChat({ currentMembers, onClose }) {
           ))
         )}
       </ul>
-
       <div>
         <button onClick={handleCreateChat} disabled={selectedUsers.length === 0}>
           Create Chat

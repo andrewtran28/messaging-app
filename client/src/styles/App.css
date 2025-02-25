@@ -32,8 +32,7 @@ main {
 }
 
 section, #page-layout {
-  /* border: 1px solid blue; */
-  min-height: calc( 100vh - 220px);
+  height: calc( 100vh - 160px);
 }
 
 #page-layout {
@@ -77,4 +76,67 @@ button:active {
 }
 button:disabled {
   background-color: lightgray;
+  cursor: unset;
+}
+
+.add-members, .see-members {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgb(147, 1, 183);
+  z-index: 3;
+  right: 20px;
+  top: 20px;
+  padding: 20px;
+  max-height: 400px;
+  width: 400px;
+  border-radius: 1rem;
+}
+
+.add-members h2, .see-members h2 {
+  margin: 0 0 10px 0;
+}
+
+.add-members ul, .see-members ul {
+  padding: 0;
+  margin: 20px 0;
+  width: 100%;
+  text-align: left;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.see-members {
+  font-size: 1.25rem;
+}
+
+.see-members li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.see-members-profile {
+  height: 1.75rem;
+  margin-right: 5px;
+}
+
+.see-members a {
+  font-weight: 600;
+  color: var(--font-light);
+  font-size: 1.5rem;
+  margin-right: 5px;
+}
+.see-members a:hover {
+  color: #49b5c6;
+}
+
+.search {
+  border: 1px solid gray;
+  width: calc(100% - 10px);
+  border-radius: 1rem;
+  line-height: 2rem;
+  padding-left: 10px;
+  margin: 10px 0;
 }
