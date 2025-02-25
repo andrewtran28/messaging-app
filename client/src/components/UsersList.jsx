@@ -67,8 +67,9 @@ function UsersList() {
         throw new Error(data.message || "Failed to check chat existence.");
       }
 
-      const chatId = data.chatId || (await createChat(otherUserId));
-      if (chatId) navigate(`/chat/${chatId}`);
+      let chatId = data.chatId;
+      if (!chatId) chatId = await createChat(otherUserId);
+      navigate(`/chat/${chatId}`);
     } catch (error) {
       console.error("Chat error:", error);
       setErrorMessage(error.message || "An error occurred while starting a chat.");
@@ -87,30 +88,34 @@ function UsersList() {
       });
 
       const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to create a new chat.");
-      }
+      if (!response.ok) throw new Error(data.message || "Failed to create chat.");
 
-      return data.chatId;
+      return data.id;
     } catch (error) {
       console.error("Error creating chat:", error);
       setErrorMessage(error.message || "An error occurred while creating a chat.");
+      return null;
     }
   };
 
   if (loading) return <p>Loading users...</p>;
 
   return (
-    <section>
-      <h2>List of Users</h2>
+    <section id="userlist-cont">
+      {errorMessage && (
+        <p className="error" style={{ color: "red" }}>
+          {errorMessage}
+        </p>
+      )}
+
+      <h2>User Directory</h2>
       <input
+        className="user-search"
         type="text"
         value={searchTerm}
         onChange={handleSearchChange}
         placeholder="Search by username..."
       />
-
-      {errorMessage && <p className="error" style={{ color: "red" }}>{errorMessage}</p>}
 
       {filteredUsers.length === 0 ? (
         <p>No users found.</p>
@@ -123,10 +128,14 @@ function UsersList() {
               onMouseEnter={() => setHoveredUser(u.id)}
               onMouseLeave={() => setHoveredUser(null)}
             >
-              <span>
-                <Link to={`/user/${u.username}`}>{u.username}</Link>
-              </span>
-              <span>({u.firstName} {u.lastName})</span>
+              <div className="user-cont">
+                <span className="username">
+                  <Link to={`/user/${u.username}`}>{u.username}</Link>
+                </span>
+                <span className="full-name">
+                  ({u.firstName} {u.lastName})
+                </span>
+              </div>
               {user && user.id !== u.id && hoveredUser === u.id && (
                 <button className="chat-btn" onClick={() => handleChat(u.id)}>
                   Chat

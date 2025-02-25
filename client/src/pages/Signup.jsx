@@ -43,14 +43,37 @@ function Signup() {
       <h1 id="title">Sign Up</h1>
       <form onSubmit={handleSignup}>
         <label>Username:</label>
-        <input name="username" type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
-        <br/><br/>
+        <input
+          name="username"
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          maxLength="30"
+          required
+        />
+        <br />
+        <br />
         <label>First Name:</label>
-        <input name="firstName" type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+        <input
+          name="firstName"
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          maxLength="30"
+          required
+        />
 
         <label>Last Name:</label>
-        <input name="lastName" type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
-        <br/><br />
+        <input
+          name="lastName"
+          type="text"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          maxLength="30"
+          required
+        />
+        <br />
+        <br />
         <label>Password:</label>
         <input
           name="password"

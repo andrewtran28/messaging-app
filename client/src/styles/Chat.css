@@ -1,0 +1,144 @@
+
+.edit-group {
+  line-height: 2rem;
+  font-size: 2rem;
+  margin: 20px 0;
+  border-radius: 2rem;
+  border: 1px solid gray;
+  max-width: 500px;
+}
+
+.chat-cont {
+  position: relative;
+  color: var(--font-light);
+}
+
+.chat-header {
+  background-color: var(--header);
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.messages-cont {
+  /* border: 1px solid red; */
+  background-color: var(--container);
+  width: 100%;
+  height: calc(100vh - 300px - 2rem);
+  overflow-y: auto;
+}
+
+.messages-cont ul {
+  display: flex;
+  flex-direction: column;
+
+  padding: 0;
+  list-style-type: none;
+}
+
+.message {
+  position: relative;
+  background-color: var(--message);
+  color: var(--font-dark);
+  margin: 5px 20px;
+  padding: 15px 10px;
+  border-radius: 1rem;
+  display: flex;
+  place-self: start;
+  max-width: max(90%, 900px);
+  min-width: 150px;
+}
+
+.you {
+  background-color: var(--accent);
+  place-self: end;
+}
+
+.message-time {
+  position: absolute;
+  top: 3px;
+  right: 10px;
+  font-size: 0.75rem;
+  color: var(--link);
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+.message:hover .message-time, 
+.message-time.visible {
+  opacity: 1;
+}
+
+.user-read {
+  position: absolute;
+  right: 10px;
+  bottom: 3px;
+  font-size: 0.75rem;
+  color: gray;
+}
+
+.message-input {
+  display: flex;
+  padding: 20px 15px;
+}
+
+#input-text {
+  /* margin: 0 20px; */
+  padding: 0 15px;
+  width: 100%;
+  line-height: 2rem;
+  font-size:1.1rem;
+  border-top-left-radius: 2rem;
+  border-bottom-left-radius: 2rem;
+  border: 1px solid gray;
+}
+
+#btn-send {
+  padding: 10px 20px;
+  border-radius: 0;
+  border-top-right-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+}
+
+.add-members {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: gray;
+  z-index: 3;
+  right: 0;
+  top: 20px;
+  padding: 20px;
+  max-height: 400px;
+  width: 500px;
+  border-radius: 1rem;
+}
+
+.add-members h2{
+  margin: 0 0 10px 0;
+}
+
+.add-members ul {
+  padding: 0;
+  margin: 10px 0;
+  width: 100%;
+  text-align: left;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+ .search {
+  border: 1px solid gray;
+  width: calc(100% - 10px);
+  border-radius: 1rem;
+  line-height: 2rem;
+  padding-left: 10px;
+  margin: 10px 0;
+}
+
+#btn-leave:hover {
+  background-color: rgb(240, 79, 79);
+}

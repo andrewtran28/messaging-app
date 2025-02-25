@@ -1,22 +1,8 @@
-const formatDate = (date) => {
+const formatDateTime = (date) => {
   if (!date) return "";
 
   const dateObj = date instanceof Date ? date : new Date(date);
   if (isNaN(dateObj.getTime())) return "";
-
-  const options = { month: "short" };
-  const month = new Intl.DateTimeFormat("en-US", options).format(dateObj);
-  const day = dateObj.getDate();
-  const year = dateObj.getFullYear();
-
-  return `${month} ${day}, ${year}`;
-};
-
-const formatDateTime = (date) => {
-  if (!date) return "";
-
-  const dateObj = date instanceof Date ? date : new Date(date); // Ensure it's a Date object
-  if (isNaN(dateObj.getTime())) return ""; // Handle invalid dates
 
   const now = new Date();
   const isSameDay =
@@ -24,9 +10,9 @@ const formatDateTime = (date) => {
     dateObj.getMonth() === now.getMonth() &&
     dateObj.getDate() === now.getDate();
 
-    const hours = dateObj.getHours() % 12 || 12;
-    const minutes = dateObj.getMinutes().toString().padStart(2, "0");
-    const ampm = dateObj.getHours() < 12 ? "AM" : "PM";
+  const hours = dateObj.getHours() % 12 || 12;
+  const minutes = dateObj.getMinutes().toString().padStart(2, "0");
+  const ampm = dateObj.getHours() < 12 ? "AM" : "PM";
 
   if (isSameDay) {
     return `${hours}:${minutes}${ampm}`;
@@ -35,12 +21,12 @@ const formatDateTime = (date) => {
     const month = new Intl.DateTimeFormat("en-US", options).format(dateObj);
     const day = dateObj.getDate();
     const year = dateObj.getFullYear();
-    return `${month} ${day} ${year} @ ${hours}:${minutes}${ampm}`;
+    return `${month} ${day}, ${year} ${hours}:${minutes}${ampm}`;
   }
 };
 
 const updateDateTime = (createdAt, updatedAt) => {
-  if (!createdAt || !updatedAt) return ""; // Handle invalid inputs
+  if (!createdAt || !updatedAt) return "";
 
   // Convert to Date objects if they are strings
   const createdDate = createdAt instanceof Date ? createdAt : new Date(createdAt);
@@ -60,4 +46,4 @@ const updateDateTime = (createdAt, updatedAt) => {
   return "";
 };
 
-export { formatDate, formatDateTime, updateDateTime };
+export { formatDateTime, updateDateTime };

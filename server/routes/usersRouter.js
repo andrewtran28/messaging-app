@@ -2,24 +2,26 @@ const { Router } = require("express");
 const usersRouter = Router();
 const usersController = require("../controllers/usersController");
 const { signupValidator } = require("../utils/validator");
-const { authenticateToken } = require("../config/auth");
+const { authToken } = require("../config/auth");
 
 //User Routing
 usersRouter.get("/", usersController.getAllUsers);
 usersRouter.post("/", signupValidator, usersController.createUser);
-usersRouter.get("/:userId", authenticateToken, usersController.getUserInfo);
-usersRouter.delete("/:userId", authenticateToken, usersController.deleteUser);
+usersRouter.get("/:userId", authToken, usersController.getUserInfo);
+usersRouter.delete("/:userId", authToken, usersController.deleteUser);
 
 //Friends & Friend Requests
-usersRouter.get("/:userId/friends", authenticateToken, usersController.getFriends);
-usersRouter.post("/:userId/friends", authenticateToken, usersController.sendFriendRequest);
-usersRouter.delete("/:userId/friends/:friendId", authenticateToken, usersController.removeFriend);
+/*
+usersRouter.get("/:userId/friends", authToken, usersController.getFriends);
+usersRouter.post("/:userId/friends", authToken, usersController.sendFriendRequest);
+usersRouter.delete("/:userId/friends/:friendId", authToken, usersController.removeFriend);
 
-usersRouter.get("/:userId/friends/requests", authenticateToken, usersController.getFriendRequests);
-usersRouter.patch("/:userId/friends/:friendId", authenticateToken, usersController.acceptFriendRequest);
-usersRouter.delete("/:userId/friend/requests/:requestId", authenticateToken, usersController.declineFriendRequest);
+usersRouter.get("/:userId/friends/requests", authToken, usersController.getFriendRequests);
+usersRouter.patch("/:userId/friends/:friendId", authToken, usersController.acceptFriendRequest);
+usersRouter.delete("/:userId/friend/requests/:requestId", authToken, usersController.declineFriendRequest);
+*/
 
 //Chats
-usersRouter.get("/:userId/chats", authenticateToken, usersController.getChats);
+usersRouter.get("/:userId/chats", authToken, usersController.getChats);
 
 module.exports = usersRouter;

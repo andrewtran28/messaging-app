@@ -16,22 +16,18 @@ function App() {
     <>
       <AuthProvider>
         <Router>
-          <div id="page-layout">
-            <div>
-              <Header />
-              <main>
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/signup" element={<Signup />} />
-                  <Route path="/chat/:chatId" element={<Chat />} />
-                  {/* <Route path="/users/" element={<ProtectedRoute element={<UserPage />} />} /> */}
-                  <Route path="*" element={<ErrorPage />} />
-                </Routes>
-              </main>
-            </div>
-            {/* <Footer /> */}
-          </div>
+          <Header />
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/chat/:chatId" element={<Chat />} />
+              {/* <Route path="/users/" element={<ProtectedRoute element={<UserPage />} />} /> */}
+              <Route path="*" element={<ErrorPage />} />
+            </Routes>
+          </main>
+          {/* <Footer /> */}
         </Router>
       </AuthProvider>
     </>

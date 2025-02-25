@@ -37,10 +37,10 @@ const configurePassport = (passport) => {
 };
 
 //Authentication Middleware
-const authenticateToken = passport.authenticate("jwt", { session: false });
+const authToken = passport.authenticate("jwt", { session: false });
 
 module.exports = {
   generateToken,
   configurePassport,
-  authenticateToken,
+  authToken,
 };

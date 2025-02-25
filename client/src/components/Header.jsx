@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
-// import "../styles/Header.css";
+import "../styles/Header.css";
 
 function Header() {
   const { user, logout } = useAuth();
@@ -40,7 +40,6 @@ function Header() {
           )}
         </nav>
       </div>
-      <hr />
     </header>
   );
 }

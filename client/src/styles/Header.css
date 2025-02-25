@@ -1,5 +1,5 @@
-header{ 
-  background-color: var(--header);
+header { 
+  background-color: var(--background);
   width: 100%;
 }
 
@@ -8,17 +8,18 @@ header{
   justify-content: space-between;
   align-items: center;
   place-self: center;
-  color: var(--font-light);
+  color: var(--font-dark);
   padding: 20px 0;
   margin: 0 20px;
   width: 100%;
-  max-width: 1200px;
+  max-width: 2000px;
 }
 
 .header-left {
   display: flex;
   font-size: 3.25rem;
   align-items: center;
+  margin: 0 10px;
 }
 
 .logo {
@@ -42,6 +43,7 @@ header{
 .header-right {
   text-align: end;
   font-size: 2rem;
+  margin: 0 10px;
 }
 
 .header-right button {
