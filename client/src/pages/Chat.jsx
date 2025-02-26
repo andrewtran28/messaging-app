@@ -143,10 +143,10 @@ function Chat() {
             </div>
 
             <div>
+              <button onClick={() => setIsSeeMembersOpen(true)}>See Members</button>
               <button onClick={() => setIsAddMembersOpen(true)}>+ Add Members</button>
               {isGroup && (
                 <>
-                  <button onClick={() => setIsSeeMembersOpen(true)}>See Members</button>
                   <button id="btn-leave" onClick={handleLeaveChat}>
                     Leave Chat
                   </button>

@@ -31,6 +31,7 @@ const getUserInfo = asyncHandler(async (req, res) => {
       firstName: true,
       lastName: true,
       profileIcon: true,
+      createdAt: true,
       chats: { select: { id: true, chat: { select: { groupName: true } } } },
     },
   });

@@ -1,0 +1,101 @@
+#user-page {
+  border-radius: 2rem;
+  background-color: var(--container);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 0 30px 0;
+}
+
+#user-page h1 {
+  display: flex;
+  justify-content: center;
+  font-size: 3rem;
+  line-height: 3rem;
+  width: 100%;
+  background-color: var(--accent);
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  margin: 0 0 10px 0;
+  padding: 15px 0;
+}
+
+#user-page h2 {
+  font-size: 2rem;
+  margin: 10px 0;
+  line-height: 3rem;
+}
+
+#user-page p {
+  margin: 5px 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-icons {
+  margin-bottom: 40px;
+}
+
+.profile-icon {
+  height: 100px;
+  width: 100px;
+  margin-right: 10px;
+  border: 8px solid rgba(0, 0, 0, 0);
+  border-radius: 100%;
+  transition: 0.15s ease-in-out;
+}
+.profile-icon:hover {
+  border: 8px solid var(--accent);
+
+}
+
+.btn-delete {
+  background-color: rgb(240, 79, 79);
+}
+.btn-delete:hover {
+  background-color: rgb(214, 36, 36);
+}
+.btn-delete:active {
+  background-color: rgb(156, 6, 6);
+}
+
+#user-page p {
+  margin-bottom: 10px;
+}
+
+#user-page input {
+  border: 1px solid gray;
+  line-height: 2rem;
+  border-radius: 2rem;
+  padding: 0 10px;
+  min-width: 250px;
+  font-size: inherit;
+  margin-bottom: 20px;
+}
+
+.profile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: var(--container);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+}

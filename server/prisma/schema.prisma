@@ -16,10 +16,10 @@ model User {
   profileIcon            String           @db.VarChar(100) @default("/profile/default.png")
   chats                  ChatMember[]
   messages               Message[]
-  reactions              MessageReaction[]
+  // reactions              MessageReaction[]
   readReceipts           ReadReceipt[]
-  friendRequestsSent     FriendRequest[]  @relation("FriendRequestsSent")
-  friendRequestsReceived FriendRequest[]  @relation("FriendRequestsReceived")
+  // friendRequestsSent     FriendRequest[]  @relation("FriendRequestsSent")
+  // friendRequestsReceived FriendRequest[]  @relation("FriendRequestsReceived")
   createdAt              DateTime         @default(now())
 
   @@map("users")
@@ -55,7 +55,7 @@ model Message {
   chatId        String
   user          User               @relation(fields: [userId], references: [id], onDelete: Cascade)
   chat          Chat               @relation(fields: [chatId], references: [id], onDelete: Cascade)
-  reactions     MessageReaction[]
+  // reactions     MessageReaction[]
   readReceipts  ReadReceipt[]
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt
@@ -63,18 +63,18 @@ model Message {
   @@map("messages")
 }
 
-model MessageReaction {
-  id          String    @id @default(uuid())
-  messageId   String    
-  userId      String
-  emoji       String
-  message     Message   @relation(fields: [messageId], references: [id], onDelete: Cascade)
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt   DateTime  @default(now())
+// model MessageReaction {
+//   id          String    @id @default(uuid())
+//   messageId   String    
+//   userId      String
+//   emoji       String
+//   message     Message   @relation(fields: [messageId], references: [id], onDelete: Cascade)
+//   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   createdAt   DateTime  @default(now())
 
-  @@unique([messageId, userId, emoji]) // Prevent duplicate reactions by the same user
-  @@map("messagereactions")
-}
+//   @@unique([messageId, userId, emoji]) // Prevent duplicate reactions by the same user
+//   @@map("messagereactions")
+// }
 
 model ReadReceipt {
   id          String    @id @default(uuid())
@@ -88,22 +88,22 @@ model ReadReceipt {
   @@map("readreceipts")
 }
 
-model FriendRequest {
-  id              String    @id @default(uuid())
-  senderId        String
-  receiverId      String
-  status          FriendRequestStatus
-  sender          User      @relation("FriendRequestsSent", fields: [senderId], references: [id], onDelete: Cascade)
-  receiver        User      @relation("FriendRequestsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+// model FriendRequest {
+//   id              String    @id @default(uuid())
+//   senderId        String
+//   receiverId      String
+//   status          FriendRequestStatus
+//   sender          User      @relation("FriendRequestsSent", fields: [senderId], references: [id], onDelete: Cascade)
+//   receiver        User      @relation("FriendRequestsReceived", fields: [receiverId], references: [id], onDelete: Cascade)
+//   createdAt       DateTime  @default(now())
+//   updatedAt       DateTime  @updatedAt
 
-  @@unique([senderId, receiverId]) // Ensure unique friend requests between users
-  @@map("friendrequests")
-}
+//   @@unique([senderId, receiverId]) // Ensure unique friend requests between users
+//   @@map("friendrequests")
+// }
 
-enum FriendRequestStatus {
-  PENDING
-  ACCEPTED
-  REJECTED
-}
+// enum FriendRequestStatus {
+//   PENDING
+//   ACCEPTED
+//   REJECTED
+// }

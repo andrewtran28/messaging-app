@@ -26,6 +26,7 @@ body {
 
 main {
   display: flex;
+  justify-content: center;
   max-width: 2000px;
   width: 100%;
   place-self: center;
@@ -75,16 +76,17 @@ button:active {
   background-color: rgb(39, 105, 115);
 }
 button:disabled {
-  background-color: lightgray;
+  background-color: rgb(156, 156, 156);
   cursor: unset;
 }
 
 .add-members, .see-members {
+  color: var(--font-light);
   position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(147, 1, 183);
+  background-color: rgb(110, 86, 129);
   z-index: 3;
   right: 20px;
   top: 20px;

@@ -1,3 +1,17 @@
+const formatDate = (date) => {
+  if (!date) return "";
+
+  const dateObj = date instanceof Date ? date : new Date(date);
+  if (isNaN(dateObj.getTime())) return "";
+
+  const options = { month: "short" };
+  const month = new Intl.DateTimeFormat("en-US", options).format(dateObj);
+  const day = dateObj.getDate();
+  const year = dateObj.getFullYear();
+
+  return `${month} ${day}, ${year}`;
+};
+
 const formatDateTime = (date) => {
   if (!date) return "";
 
@@ -26,7 +40,7 @@ const formatDateTime = (date) => {
 };
 
 const updateDateTime = (createdAt, updatedAt) => {
-  if (!createdAt || !updatedAt) return "";
+  if (!createdAt || !updatedAt) return ""; // Handle invalid inputs
 
   // Convert to Date objects if they are strings
   const createdDate = createdAt instanceof Date ? createdAt : new Date(createdAt);
@@ -46,4 +60,4 @@ const updateDateTime = (createdAt, updatedAt) => {
   return "";
 };
 
-export { formatDateTime, updateDateTime };
+export { formatDate, formatDateTime, updateDateTime };
