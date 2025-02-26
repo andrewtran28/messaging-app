@@ -65,16 +65,17 @@ margin: 20px;
 }
 
 .message {
-  position: relative;
   background-color: var(--message);
   color: var(--font-dark);
-  margin: 5px 20px;
-  padding: 15px 10px;
-  border-radius: 1rem;
+  position: relative;
   display: flex;
   place-self: start;
+  margin: 5px 20px;
+  padding: 20px 10px;
+  border-radius: 1rem;
   max-width: max(90%, 900px);
   min-width: 150px;
+  font-size: 1.1rem;
 }
 
 .you {

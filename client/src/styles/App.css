@@ -42,6 +42,7 @@ section, #page-layout {
   margin: 10px 20px 10px 10px;
   border-radius: 1rem;
   width: 100%;
+  min-width: 600px;
 }
 
 a {
