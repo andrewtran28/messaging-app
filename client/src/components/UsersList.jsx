@@ -12,9 +12,14 @@ function UsersList() {
   const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(false); // New state
   const [hoveredUser, setHoveredUser] = useState(null);
 
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowLoading(true);
+    }, 3000); // Show loading messages after 3 seconds
+
     const fetchUsers = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/users`);
@@ -30,19 +35,20 @@ function UsersList() {
         setErrorMessage("An error occurred while fetching users.");
       } finally {
         setLoading(false);
+        clearTimeout(timer);
       }
     };
 
     fetchUsers();
+
+    return () => clearTimeout(timer);
   }, []);
 
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
 
-    const filtered = users.filter((user) =>
-      user.username.toLowerCase().includes(value.toLowerCase())
-    );
+    const filtered = users.filter((user) => user.username.toLowerCase().includes(value.toLowerCase()));
     setFilteredUsers(filtered);
   };
 
@@ -98,7 +104,7 @@ function UsersList() {
     }
   };
 
-  if (loading) {
+  if (loading && showLoading) {
     return (
       <>
         <p>Loading users...</p>
