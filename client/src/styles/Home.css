@@ -6,6 +6,10 @@
   margin: 0 0 20px 0;
 }
 
+.user-directory p {
+  margin: 0 10px;
+}
+
 .user-search {
   border: 1px solid gray;
   border-radius: 2rem;
