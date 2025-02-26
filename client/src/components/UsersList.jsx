@@ -102,12 +102,6 @@ function UsersList() {
 
   return (
     <section id="userlist-cont">
-      {errorMessage && (
-        <p className="error" style={{ color: "red" }}>
-          {errorMessage}
-        </p>
-      )}
-
       <h2>User Directory</h2>
       <input
         className="user-search"
@@ -116,6 +110,13 @@ function UsersList() {
         onChange={handleSearchChange}
         placeholder="Search by username"
       />
+
+      {errorMessage && (
+        <p className="error" style={{ color: "red" }}>
+          {errorMessage}
+        </p>
+      )}
+
       <div className="user-list">
         {filteredUsers.length === 0 ? (
           <p>No users found.</p>
