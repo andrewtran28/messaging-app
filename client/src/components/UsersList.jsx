@@ -98,7 +98,14 @@ function UsersList() {
     }
   };
 
-  if (loading) return <p>Loading users... (This may take up to 60 seconds to get the database running.)</p>;
+  if (loading) {
+    return (
+      <>
+        <p>Loading users...</p>
+        <p>(This may take up to 30 seconds due to slow servers.)</p>
+      </>
+    );
+  }
 
   return (
     <section id="userlist-cont">
