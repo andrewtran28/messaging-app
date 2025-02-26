@@ -1,11 +1,14 @@
 
 .edit-group {
-  line-height: 2rem;
+  line-height: 2.5rem;
   font-size: 2rem;
-  margin: 20px 0;
+  font-family: inherit;
+  font-weight: 600;
+  margin: 20px -10px;
   border-radius: 2rem;
   border: 1px solid gray;
   max-width: 500px;
+  padding: 0 10px;
 }
 
 .chat-cont {

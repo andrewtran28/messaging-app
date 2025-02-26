@@ -17,7 +17,7 @@ header {
 
 .header-left {
   display: flex;
-  font-size: 3.25rem;
+  font-size: 4rem;
   align-items: center;
   margin: 0 10px;
 }

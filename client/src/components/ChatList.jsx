@@ -45,6 +45,11 @@ function ChatList() {
     return message.length > maxLength ? message.slice(0, maxLength) + "..." : message;
   };
 
+  const truncateName = (name, maxLength = 25) => {
+    if (!name) return "Unnamed Group";
+    return name.length > maxLength ? name.slice(0, maxLength) + "..." : name;
+  };
+
   if (loading) return <p>Loading chats...</p>;
 
   return (
@@ -68,13 +73,15 @@ function ChatList() {
 
               return (
                 <li key={chat.id} className="chat">
-                  {!chat.isGroup && otherParticipant && (
-                    <img className="chatlist-profile" src={otherParticipant.profileIcon} alt="Profile" />
+                  {!chat.isGroup && otherParticipant ? (
+                    <img className="chatlist-profile" src={otherParticipant.profileIcon} />
+                  ) : (
+                    <img className="chatlist-profile" src={"/profile/group-chat.png"} />
                   )}
                   <div>
                     <Link to={`/chat/${chat.id}`}>
                       <span className="chat-name">
-                        {chat.isGroup ? chat.chatName : otherParticipant?.username || "Unnamed Chat"}
+                        {chat.isGroup ? truncateName(chat.chatName) : otherParticipant?.username || "Unnamed Chat"}
                       </span>
                     </Link>
                     <p
