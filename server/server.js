@@ -13,6 +13,7 @@ const { Server } = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
+const groupChats = new Map();
 const io = new Server(server, {
   cors: {
     origin: process.env.FRONTEND_URL,
@@ -20,9 +21,6 @@ const io = new Server(server, {
     credentials: true,
   },
 });
-
-const users = new Map();
-const groupChats = new Map();
 
 io.on("connection", (socket) => {
   socket.on("join", (chatId) => {
@@ -44,7 +42,6 @@ io.on("connection", (socket) => {
 
   // Disconnect and remove the user from the group chat
   socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
     for (let [chatId, sockets] of groupChats.entries()) {
       if (sockets.has(socket.id)) {
         sockets.delete(socket.id);

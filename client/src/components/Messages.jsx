@@ -11,7 +11,7 @@ function Messages({ messages, chatId, user, token, setMessages, members }) {
   const messagesContainerRef = useRef(null);
 
   useEffect(() => {
-    if (user && chatId) socket.emit("join", user.id, chatId);
+    if (user && chatId) socket.emit("join", chatId);
 
     const handleReceiveMessage = (messageData) => {
       const formattedMessage = {
