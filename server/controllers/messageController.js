@@ -10,11 +10,7 @@ const sendMessage = asyncHandler(async (req, res) => {
   if (!text) throw new CustomError(400, "Message content is required.");
 
   const message = await prisma.message.create({
-    data: {
-      chatId,
-      userId,
-      text,
-    },
+    data: { chatId, userId, text },
     include: {
       user: { select: { id: true, username: true } }, // Include user data
     },
@@ -59,24 +55,9 @@ const deleteMessage = asyncHandler(async (req, res) => {
   res.json({ message: "Message deleted successfully" });
 });
 
-const sendReaction = asyncHandler(async (req, res) => {
-  const { messageId } = req.params;
-  const { emoji } = req.body;
-  const userId = req.user.id;
-
-  if (!emoji) throw new CustomError(400, "Reaction emoji is required");
-
-  const reaction = await prisma.messageReaction.create({
-    data: { messageId, userId, emoji },
-  });
-
-  res.status(201).json(reaction);
-});
-
 const readMessages = asyncHandler(async (req, res) => {
   const { messageId } = req.params;
   const userId = req.user.id;
-
   const readReceipt = await prisma.readReceipt.upsert({
     where: { messageId_userId: { messageId, userId } },
     update: { readAt: new Date() },
@@ -91,6 +72,5 @@ module.exports = {
   getMessages,
   editMessage,
   deleteMessage,
-  sendReaction,
   readMessages,
 };

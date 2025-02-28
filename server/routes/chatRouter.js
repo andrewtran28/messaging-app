@@ -16,9 +16,9 @@ chatRouter.delete("/:chatId", authToken, chatController.leaveGroupChat);
 //Messages
 chatRouter.post("/:chatId/messages", authToken, messageController.sendMessage);
 chatRouter.get("/:chatId/messages", authToken, messageController.getMessages);
+chatRouter.post("/:chatId/messages/:messageId/read-receipt", authToken, messageController.readMessages);
 // chatRouter.put("/:chatId/messages/:messagesId", authToken, messageController.editMessage);
 // chatRouter.delete("/:chatId/messages/:messageId", authToken, messageController.deleteMessage);
 // chatRouter.post("/:chatId/messages/:messageId/reactions", messageController.sendReaction);
-chatRouter.post("/:chatId/messages/:messageId/read-receipt", authToken, messageController.readMessages);
 
 module.exports = chatRouter;
