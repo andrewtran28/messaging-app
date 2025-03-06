@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ProfileModal from "../components/ProfileModal";
 import "../styles/Login.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -10,8 +11,13 @@ function Signup() {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [profileIcon, setProfileIcon] = useState("/profile/default.png");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
+  const handleProfileIconChange = (icon) => {
+    setProfileIcon(icon);
+  };
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -21,7 +27,14 @@ function Signup() {
       const response = await fetch(`${API_BASE_URL}/api/users`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, firstName, lastName, password, confirmPassword }),
+        body: JSON.stringify({
+          username,
+          firstName,
+          lastName,
+          password,
+          confirmPassword,
+          profileIcon,
+        }),
       });
 
       const data = await response.json();
@@ -43,6 +56,8 @@ function Signup() {
     <div id="login">
       <h1 id="title">Sign Up</h1>
       <form onSubmit={handleSignup}>
+        <ProfileModal profileIcon={profileIcon} handleProfileIconChange={handleProfileIconChange} />
+
         <label>Username:</label>
         <input
           name="username"
@@ -52,8 +67,7 @@ function Signup() {
           maxLength="30"
           required
         />
-        <br />
-        <br />
+
         <label>First Name:</label>
         <input
           name="firstName"
@@ -73,8 +87,7 @@ function Signup() {
           maxLength="30"
           required
         />
-        <br />
-        <br />
+
         <label>Password:</label>
         <input
           name="password"
@@ -92,6 +105,7 @@ function Signup() {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
         />
+
         <br />
         {errorMessage && (
           <span style={{ color: "red" }}>
@@ -99,7 +113,10 @@ function Signup() {
             <br />
           </span>
         )}
-        <button type="submit">Sign Up</button>
+
+        <button type="submit" id="btn-login">
+          Sign Up
+        </button>
       </form>
     </div>
   );

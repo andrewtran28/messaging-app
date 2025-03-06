@@ -56,6 +56,7 @@ const createUser = asyncHandler(async (req, res) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       password: hashedPassword,
+      profileIcon: req.body.profileIcon,
     },
   });
 
@@ -75,7 +76,7 @@ const updateProfile = asyncHandler(async (req, res) => {
     // Update profile icon in database
     const updatedUser = await prisma.user.update({
       where: { username },
-      data: { profileIcon: `/profile/${profileIcon}` }, // Store relative path
+      data: { profileIcon: profileIcon },
       select: { username: true, profileIcon: true },
     });
 

@@ -38,23 +38,6 @@
   align-items: center;
 }
 
-.profile-icons {
-  margin-bottom: 40px;
-}
-
-.profile-icon {
-  height: 100px;
-  width: 100px;
-  margin-right: 10px;
-  border: 8px solid rgba(0, 0, 0, 0);
-  border-radius: 100%;
-  transition: 0.15s ease-in-out;
-}
-.profile-icon:hover {
-  border: 8px solid var(--accent);
-
-}
-
 .btn-delete {
   background-color: rgb(240, 79, 79);
 }
@@ -77,18 +60,6 @@
   min-width: 250px;
   font-size: inherit;
   margin-bottom: 20px;
-}
-
-.profile-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .modal-content {

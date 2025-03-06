@@ -55,7 +55,9 @@ function Login() {
             <br />
           </span>
         )}
-        <button type="submit">Log In</button>
+        <button type="submit" id="btn-login">
+          Log In
+        </button>
       </form>
     </div>
   );

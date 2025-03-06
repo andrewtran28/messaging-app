@@ -2,26 +2,15 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 import { formatDate } from "../utils/FormatDate";
+import ProfileModal from "../components/ProfileModal";
 import "../styles/UserPage.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const profileIcons = [
-  "default.png",
-  "man.png",
-  "woman.png",
-  "man2.png",
-  "woman2.png",
-  "man3.png",
-  "woman3.png",
-  "man4.png",
-  "woman4.png",
-];
 
 function UserPage() {
   const { username } = useParams();
   const { user, token, logout } = useAuth();
   const [userInfo, setUserInfo] = useState(null);
-  const [showModal, setShowModal] = useState(false);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -56,8 +45,7 @@ function UserPage() {
       });
 
       if (response.ok) {
-        setUserInfo((prev) => ({ ...prev, profileIcon: `/profile/${icon}` }));
-        setShowModal(false); // Close modal after selection
+        setUserInfo((prev) => ({ ...prev, profileIcon: icon }));
       } else {
         console.error("Failed to update profile picture.");
       }
@@ -109,13 +97,10 @@ function UserPage() {
           <div className="user-info">
             <h2>{userInfo.username}</h2>
             {user && user.username === username ? (
-              <img
-                src={userInfo.profileIcon}
-                className="profile-icon"
-                title="Edit Profile Icon"
-                onClick={() => setShowModal(true)}
-                style={{ cursor: "pointer" }}
-              />
+              <>
+                <ProfileModal profileIcon={userInfo.profileIcon} handleProfileIconChange={handleProfileIconChange} />
+                <br />
+              </>
             ) : (
               <img src={userInfo.profileIcon} className="profile-icon" />
             )}
@@ -167,28 +152,6 @@ function UserPage() {
         </>
       ) : (
         <p>{errorMessage || "Loading user info..."}</p>
-      )}
-
-      {showModal && (
-        <div className="profile-modal">
-          <div className="modal-content">
-            <h2>Select a Profile Icon</h2>
-            <div className="profile-icons">
-              {profileIcons.map((icon) => (
-                <img
-                  key={icon}
-                  src={`/profile/${icon}`}
-                  alt={icon}
-                  className={`profile-icon ${userInfo.profileIcon === `/profile/${icon}` ? "selected" : ""}`}
-                  onClick={() => handleProfileIconChange(icon)}
-                />
-              ))}
-            </div>
-            <button className="close-modal" onClick={() => setShowModal(false)}>
-              Close
-            </button>
-          </div>
-        </div>
       )}
     </div>
   );
