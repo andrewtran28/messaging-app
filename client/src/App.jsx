@@ -8,6 +8,7 @@ import UserPage from "./pages/UserPage";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ErrorPage from "./pages/ErrorPage";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </main>
+          <Footer />
         </Router>
       </AuthProvider>
     </>

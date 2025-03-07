@@ -8,18 +8,17 @@ import "../styles/Home.css";
 function Home() {
   const { user } = useAuth();
   const [isAddMembersOpen, setIsAddMembersOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   return (
     <>
-      {user && (
-        <>
-          <ChatList />
-        </>
-      )}
+      {user && <ChatList />}
+
       <div id="page-layout">
         <div className="user-directory">
-          <UsersList />
-          {user && (
+          <UsersList loading={loading} setLoading={setLoading} />
+
+          {user && !loading && (
             <button className="btn-create-chat" onClick={() => setIsAddMembersOpen(true)}>
               Create New Chat
             </button>

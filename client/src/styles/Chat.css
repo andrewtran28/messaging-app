@@ -52,7 +52,7 @@ margin: 20px;
 .messages-cont {
   background-color: var(--container);
   width: 100%;
-  height: calc(100vh - 300px - 2rem);
+  height: calc(100vh - 320px - 2rem);
   overflow-y: auto;
 }
 
@@ -111,6 +111,7 @@ margin: 20px;
 }
 
 .message-input {
+  /* border: 1px solid red; */
   display: flex;
   padding: 20px 15px;
 }

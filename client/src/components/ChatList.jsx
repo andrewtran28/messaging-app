@@ -50,55 +50,59 @@ function ChatList() {
     return name.length > maxLength ? name.slice(0, maxLength) + "..." : name;
   };
 
-  if (loading) return <p>Loading chats...</p>;
-
   return (
     <section className="chatlist">
       <h2>Your Chats</h2>
 
-      {errorMessage && (
-        <p className="error" style={{ color: "red" }}>
-          {errorMessage}
-        </p>
+      {loading ? (
+        <p className="no-chats">Loading chats...</p>
+      ) : (
+        <>
+          {errorMessage && (
+            <p className="error" style={{ color: "red" }}>
+              {errorMessage}
+            </p>
+          )}
+
+          <div className="chats">
+            {chats.length === 0 ? (
+              <p className="no-chats">You have no active chats.</p>
+            ) : (
+              <ul>
+                {chats.map((chat) => {
+                  const isUnread = chat.lastMessage && !chat.lastMessageReadBy?.includes(user.id);
+                  const otherParticipant = !chat.isGroup ? chat.members.find((member) => member.id !== user.id) : null;
+
+                  return (
+                    <li key={chat.id} className="chat">
+                      {!chat.isGroup && otherParticipant ? (
+                        <img className="chatlist-profile" src={otherParticipant.profileIcon} />
+                      ) : (
+                        <img className="chatlist-profile" src={"/profile/group-chat.png"} />
+                      )}
+                      <div>
+                        <Link to={`/chat/${chat.id}`}>
+                          <span className="chat-name">
+                            {chat.isGroup ? truncateName(chat.chatName) : otherParticipant?.username || "Unnamed Chat"}
+                          </span>
+                        </Link>
+                        <p
+                          className="chat-preview"
+                          style={{ color: isUnread ? "black" : "inherit", fontWeight: isUnread ? "600" : "400" }}
+                        >
+                          {chat.lastMessageSender && `${chat.lastMessageSender}: `}
+                          {truncateMessage(chat.lastMessage)}
+                        </p>
+                      </div>
+                      <span className="timestamp">{formatDateTime(chat.lastMessageAt)}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </>
       )}
-
-      <div className="chats">
-        {chats.length === 0 ? (
-          <p className="no-chats">You have no active chats.</p>
-        ) : (
-          <ul>
-            {chats.map((chat) => {
-              const isUnread = chat.lastMessage && !chat.lastMessageReadBy?.includes(user.id);
-              const otherParticipant = !chat.isGroup ? chat.members.find((member) => member.id !== user.id) : null;
-
-              return (
-                <li key={chat.id} className="chat">
-                  {!chat.isGroup && otherParticipant ? (
-                    <img className="chatlist-profile" src={otherParticipant.profileIcon} />
-                  ) : (
-                    <img className="chatlist-profile" src={"/profile/group-chat.png"} />
-                  )}
-                  <div>
-                    <Link to={`/chat/${chat.id}`}>
-                      <span className="chat-name">
-                        {chat.isGroup ? truncateName(chat.chatName) : otherParticipant?.username || "Unnamed Chat"}
-                      </span>
-                    </Link>
-                    <p
-                      className="chat-preview"
-                      style={{ color: isUnread ? "black" : "inherit", fontWeight: isUnread ? "600" : "400" }}
-                    >
-                      {chat.lastMessageSender && `${chat.lastMessageSender}: `}
-                      {truncateMessage(chat.lastMessage)}
-                    </p>
-                  </div>
-                  <span className="timestamp">{formatDateTime(chat.lastMessageAt)}</span>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </div>
     </section>
   );
 }

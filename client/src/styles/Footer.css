@@ -1,0 +1,8 @@
+footer {
+  /* background-color: var(--header); */
+  /* color: var(--font-light); */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}

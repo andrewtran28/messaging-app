@@ -30,10 +30,11 @@ main {
   max-width: 2000px;
   width: 100%;
   place-self: center;
+  height: calc( 100vh - 160px);
 }
 
 section, #page-layout {
-  height: calc( 100vh - 160px);
+  height: calc( 100vh - 185px);
 }
 
 #page-layout {

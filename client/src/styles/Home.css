@@ -17,10 +17,11 @@
   font-size: 1.5rem;
   padding: 5px 20px;
   margin: 10px 20px;
+  width: 600px;
 }
 
 .user-list {
-  max-height: calc( 100vh - 310px - 2rem);
+  min-height: calc( 100vh - 350px - 2rem);
   overflow-y: auto;
   line-height: 2rem;
   padding: 0 20px;
@@ -45,7 +46,7 @@
 
 .chat-btn {
   padding: 5px 10px;
-  margin: 0 5px;
+  margin: 0 10px;
 }
 
 .username {

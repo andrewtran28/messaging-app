@@ -5,7 +5,7 @@ function Footer() {
   return (
     <footer>
       <span>
-        © 2025 <Link to="https://github.com/andrewtran28/blog-api">Buhlog</Link> by{" "}
+        © 2025 <Link to="https://github.com/andrewtran28/messaging-app">Babble-On</Link> by{" "}
         <Link to="https://andrewtran-developer.netlify.app/home">minglee</Link>. All rights reserved.
       </span>
     </footer>

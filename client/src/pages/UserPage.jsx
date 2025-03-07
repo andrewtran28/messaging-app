@@ -151,7 +151,7 @@ function UserPage() {
           )}
         </>
       ) : (
-        <p>{errorMessage || "Loading user info..."}</p>
+        <p className="loading-message">{errorMessage || "Loading user info..."}</p>
       )}
     </div>
   );
