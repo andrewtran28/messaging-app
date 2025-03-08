@@ -21,7 +21,7 @@
 }
 
 .user-list {
-  min-height: calc( 100vh - 350px - 2rem);
+  max-height: calc( 100vh - 350px - 2rem);
   overflow-y: auto;
   line-height: 2rem;
   padding: 0 20px;
