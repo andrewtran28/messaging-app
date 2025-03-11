@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
-
 import ChatList from "../components/ChatList";
 import AddMembers from "../components/AddMembers";
 import SeeMembers from "../components/SeeMembers";
 import Messages from "../components/Messages";
+
+import seeMembers from "../assets/see-members.png";
+import addMembers from "../assets/add-members.png";
+import leaveChat from "../assets/leave-chat.png";
+
 import "../styles/Chat.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -99,13 +103,13 @@ function Chat() {
   if (errorMessage) return <p>{errorMessage}</p>;
 
   return (
-    <>
+    <div id="chat-page">
       <ChatList />
 
       <div id="page-layout">
         <div className="chat-cont">
           <div className="chat-header" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="chat-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               {isEditingName ? (
                 <>
                   <input
@@ -124,7 +128,14 @@ function Chat() {
                 <>
                   {isGroup ? (
                     <>
-                      <h1>{groupName || otherMembers.map((member) => member.user.username).join(", ")}</h1>
+                      <h1>
+                        {groupName ||
+                          (() => {
+                            const usernames = otherMembers.map((member) => member.user.username);
+                            if (usernames.length <= 3) return usernames.join(", ");
+                            return `${usernames.slice(0, 3).join(", ")}... +${usernames.length - 3} Members`;
+                          })()}
+                      </h1>
                       {isHovered && <button onClick={() => setIsEditingName(true)}>Edit</button>}
                     </>
                   ) : (
@@ -142,13 +153,17 @@ function Chat() {
               )}
             </div>
 
-            <div>
-              <button onClick={() => setIsSeeMembersOpen(true)}>See Members</button>
-              <button onClick={() => setIsAddMembersOpen(true)}>+ Add Members</button>
+            <div className="chat-btns">
+              <button onClick={() => setIsSeeMembersOpen(true)}>
+                <img className="chat-btn" src={seeMembers} title="See Members" />
+              </button>
+              <button onClick={() => setIsAddMembersOpen(true)}>
+                <img className="chat-btn" src={addMembers} title="+ Add Members" />
+              </button>
               {isGroup && (
                 <>
                   <button id="btn-leave" onClick={handleLeaveChat}>
-                    Leave Chat
+                    <img className="chat-btn" src={leaveChat} title="Leave Chat" />
                   </button>
                 </>
               )}
@@ -175,7 +190,7 @@ function Chat() {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

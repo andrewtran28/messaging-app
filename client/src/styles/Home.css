@@ -17,21 +17,23 @@
   font-size: 1.5rem;
   padding: 5px 20px;
   margin: 10px 20px;
-  width: 600px;
+  width: calc(100% - 40px);
+  box-sizing: border-box;
 }
 
 .user-list {
-  max-height: calc( 100vh - 350px - 2rem);
+  max-height: calc(100vh - 350px - 2rem);
   overflow-y: auto;
   line-height: 2rem;
   padding: 0 20px;
 }
 
 .user {
+  align-items: center;
   display: flex;
   justify-content: space-between;
   width: fit-content;
-  min-width: 350px;
+  min-width: 300px;
   padding: 5px;
 }
 
@@ -65,4 +67,38 @@
   position: absolute;
   top: 20px;
   right: 20px;
+}
+
+@media (max-width: 1000px) {
+  .user-list {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 800px) {
+  .user-search {
+    line-height: 1.25rem;
+    font-size: 1rem;
+    padding: 5px 10px;
+    margin: 10px 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  #userlist-cont h2 {
+    padding: 15px 20px;
+  }
+
+  .user {
+    line-height: 1.5rem;
+  }
+
+  .user a {
+    font-size: 1.25rem;
+  }
+
+  .btn-create-chat {
+    top: 0.8rem;
+    font-size: 0.8rem;
+  }
 }

@@ -42,7 +42,7 @@ function Header() {
         <div className="header-left">
           <Link to="/" className="logo">
             <img className="logo-img" src="/logo.png" alt="Babble-On logo" />
-            Babble-On
+            <span>Babble-On</span>
           </Link>
         </div>
 
@@ -55,7 +55,7 @@ function Header() {
                   Hello, <Link to={`/user/${user.username}`}>{user.username}</Link>
                 </span>
               </span>
-              <div>
+              <div className="header-btns">
                 <Link to={`/user/${user.username}`}>
                   <button>Your Account</button>
                 </Link>

@@ -40,7 +40,7 @@ function ChatList() {
     fetchChats();
   }, [user, token]);
 
-  const truncateMessage = (message, maxLength = 40) => {
+  const truncateMessage = (message, maxLength = 30) => {
     if (!message) return "No messages yet";
     return message.length > maxLength ? message.slice(0, maxLength) + "..." : message;
   };
@@ -80,7 +80,7 @@ function ChatList() {
                       ) : (
                         <img className="chatlist-profile" src={"/profile/group-chat.png"} />
                       )}
-                      <div>
+                      <div className="chat-info">
                         <Link to={`/chat/${chat.id}`}>
                           <span className="chat-name">
                             {chat.isGroup ? truncateName(chat.chatName) : otherParticipant?.username || "Unnamed Chat"}

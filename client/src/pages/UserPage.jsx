@@ -94,8 +94,8 @@ function UserPage() {
       {userInfo ? (
         <>
           <h1 id="title">{user && user.username === username ? "Your Account" : `${userInfo.username}'s Profile`}</h1>
+          <h2>{userInfo.username}</h2>
           <div className="user-info">
-            <h2>{userInfo.username}</h2>
             {user && user.username === username ? (
               <>
                 <ProfileModal profileIcon={userInfo.profileIcon} handleProfileIconChange={handleProfileIconChange} />

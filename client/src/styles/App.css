@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 
 body {
   --background: #fffffa;
@@ -20,7 +20,7 @@ body {
 
 #title {
   font-size: 4rem;
-  line-height: 4rem;;
+  line-height: 4rem;
   margin: 30px 0 10px 0;
 }
 
@@ -30,11 +30,12 @@ main {
   max-width: 2000px;
   width: 100%;
   place-self: center;
-  height: calc( 100vh - 160px);
+  min-height: calc(100vh - 160px);
 }
 
-section, #page-layout {
-  height: calc( 100vh - 185px);
+section,
+#page-layout {
+  height: calc(100vh - 185px);
 }
 
 #page-layout {
@@ -43,7 +44,6 @@ section, #page-layout {
   margin: 10px 20px 10px 10px;
   border-radius: 1rem;
   width: 100%;
-  min-width: 600px;
 }
 
 a {
@@ -82,7 +82,8 @@ button:disabled {
   cursor: unset;
 }
 
-.add-members, .see-members {
+.add-members,
+.see-members {
   color: var(--font-light);
   position: absolute;
   display: flex;
@@ -98,17 +99,21 @@ button:disabled {
   border-radius: 1rem;
 }
 
-.add-members h2, .see-members h2 {
+.add-members h2,
+.see-members h2 {
   margin: 0 0 10px 0;
 }
 
-.add-members ul, .see-members ul {
+.add-members ul,
+.see-members ul {
   padding: 0;
   margin: 20px 0;
   width: 100%;
   text-align: left;
   max-height: 200px;
   overflow-y: auto;
+  overflow-x: auto;
+  white-space: nowrap; /* Prevent line breaks within list items */
 }
 
 .see-members {
@@ -143,4 +148,43 @@ button:disabled {
   line-height: 2rem;
   padding-left: 10px;
   margin: 10px 0;
+}
+
+@media (max-width: 1200px) {
+  #page-layout {
+    height: unset;
+  }
+}
+
+@media (max-width: 1000px) {
+  main {
+    flex-direction: column;
+    align-items: center;
+    width: calc(100% - 20px);
+  }
+
+  main,
+  section {
+    height: unset;
+  }
+
+  #page-layout {
+    margin: 10px 10px 20px 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .add-members,
+  .see-members {
+    top: 10px;
+  }
+}
+
+@media (max-width: 500px) {
+  .add-members,
+  .see-members {
+    padding: 15px;
+    max-height: 400px;
+    width: 300px;
+  }
 }

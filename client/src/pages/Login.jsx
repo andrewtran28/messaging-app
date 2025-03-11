@@ -44,7 +44,7 @@ function Login() {
       <h1 id="title">Log In</h1>
       <form onSubmit={handleLogin}>
         <label name="username">Username: </label>
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
+        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength="30" required />
 
         <label name="password"> Password: </label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />

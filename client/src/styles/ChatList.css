@@ -22,6 +22,7 @@
 
 .chats {
   min-height: calc(100vh - 320px);
+  max-height: calc(100vh - 100px);
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -55,11 +56,81 @@
   margin: 0 0 10px 0;
   font-size: 0.9rem;
   text-wrap: nowrap;
+  overflow-x: hidden;
 }
 
 .timestamp {
   position: absolute;
-  top: 3px;
+  top: 5px;
   right: 0;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
+  text-align: end;
+  z-index: 2;
+  background-color: var(--container);
+}
+
+@media (max-width: 1200px) {
+  .chatlist {
+    width: 350px;
+  }
+
+  .chatlist h2 {
+    font-size: 1.25rem;
+    padding: 24px;
+  }
+
+  .chatlist ul {
+    margin: 0 10px;
+  }
+
+  .chat-name {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  .chatlist h2 {
+    font-size: 1.5rem;
+    padding: 26px 20px;
+  }
+
+  .chatlist {
+    max-width: unset;
+    width: 100%;
+    margin: 10px;
+  }
+
+  .chats {
+    min-height: unset;
+  }
+}
+
+@media (max-width: 600px) {
+  .chatlist h2 {
+    padding: 15px 20px;
+  }
+
+  .chats ul {
+    margin: 0 10px;
+  }
+
+  .chat-name {
+    font-size: 1.1rem;
+  }
+
+  .chat-preview {
+    max-width: 400px;
+  }
+
+  .timestamp {
+    width: min-content;
+    min-width: 80px;
+    text-align: end;
+  }
+}
+
+@media (max-width: 500px) {
+  .chat-preview {
+    max-width: 275px;
+  }
 }
