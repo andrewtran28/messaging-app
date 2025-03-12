@@ -127,7 +127,7 @@ function UsersList({ loading, setLoading }) {
                     </span>
                   </div>
                   {user && user.id !== u.id && hoveredUser === u.id && (
-                    <button className="chat-btn" onClick={() => handleChat(u.id)}>
+                    <button className="user-chat-btn" onClick={() => handleChat(u.id)}>
                       Chat
                     </button>
                   )}

@@ -34,6 +34,7 @@
   justify-content: space-between;
   width: fit-content;
   min-width: 300px;
+  text-wrap: nowrap;
   padding: 5px;
 }
 
@@ -46,7 +47,7 @@
   margin-right: 10px;
 }
 
-.chat-btn {
+.user-chat-btn {
   padding: 5px 10px;
   margin: 0 10px;
 }
