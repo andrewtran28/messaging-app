@@ -1,14 +1,7 @@
-/* main {
-  display: flex;
-  justify-content: center;
-  max-width: 2000px;
-  width: 100%;
-  place-self: center;
-  height: calc(100vh - 160px);
-} */
-
 #chat-page {
   display: flex;
+  max-width: 2000px;
+  width: 100%;
 }
 
 .edit-group {
@@ -69,7 +62,7 @@
 
 .chat-btns button {
   margin: 0 3px;
-  padding: 5px 0;
+  padding: 8px;
 }
 
 .chat-btn {
@@ -195,6 +188,11 @@
   .chat-header h1 {
     font-size: 1.25rem;
   }
+
+  .chat-btns button {
+    margin: 0 2px;
+    padding: 5px;
+  }
 }
 
 @media (max-width: 400px) {
@@ -207,5 +205,6 @@
   .chat-btn {
     width: 1rem;
     margin: 0;
+    padding: 0 5px;
   }
 }
