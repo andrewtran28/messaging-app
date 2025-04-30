@@ -4,13 +4,30 @@ import { useAuth } from "../utils/AuthContext";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function CreateChat({ currentMembers, onClose }) {
+type Member = {
+  userId: string;
+  username: string;
+};
+
+type User = {
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+};
+
+type CreateChatProps = {
+  currentMembers: Member[];
+  onClose: () => void;
+};
+
+function CreateChat({ currentMembers, onClose }: CreateChatProps) {
   const navigate = useNavigate();
   const { user, token } = useAuth();
-  const [users, setUsers] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [users, setUsers] = useState<User[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -24,14 +41,18 @@ function CreateChat({ currentMembers, onClose }) {
         setUsers(data);
       } catch (error) {
         console.error("Error fetching users:", error);
-        setErrorMessage(error.message);
+        if (error instanceof Error) {
+          setErrorMessage(error.message);
+        } else {
+          setErrorMessage("An unknown error occurred.");
+        }
       }
     };
 
     fetchUsers();
   }, [token]);
 
-  const handleCheckboxChange = (userId) => {
+  const handleCheckboxChange = (userId: string) => {
     setSelectedUsers((prevSelected) =>
       prevSelected.includes(userId) ? prevSelected.filter((id) => id !== userId) : [...prevSelected, userId]
     );
@@ -56,7 +77,10 @@ function CreateChat({ currentMembers, onClose }) {
         const checkData = await checkResponse.json();
         if (checkResponse.ok && checkData.chatId) {
           onClose();
-          return onCreateGroupChat(checkData.chatId);
+
+          // return onCreateGroupChat(checkData.chatId); --Not sure why this was here. Used navigate instead.
+          navigate(`/chat/${checkData.chatId}`);
+          return;
         }
       }
 
@@ -76,8 +100,12 @@ function CreateChat({ currentMembers, onClose }) {
       onClose();
       navigate(`/chat/${data.id}`);
     } catch (error) {
-      console.error("Error creating chat:", error);
-      setErrorMessage(error.message);
+      console.error("Error:", error);
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage("An unknown error occurred.");
+      }
     }
   };
 

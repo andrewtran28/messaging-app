@@ -10,6 +10,7 @@ import seeMembers from "../assets/see-members.png";
 import addMembers from "../assets/add-members.png";
 import leaveChat from "../assets/leave-chat.png";
 
+import type { ChatMember, Message } from "../types/models";
 import "../styles/Chat.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -19,8 +20,8 @@ function Chat() {
   const { chatId } = useParams();
   const { user, token } = useAuth();
   const [groupName, setGroupName] = useState("");
-  const [members, setMembers] = useState([]);
-  const [messages, setMessages] = useState([]);
+  const [members, setMembers] = useState<ChatMember[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
@@ -43,14 +44,18 @@ function Chat() {
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || "Failed to fetch chat details.");
 
-        if (!data.members.some((member) => member.userId === user.id)) return navigate("/");
+        if (!data.members.some((member: ChatMember) => member.userId === user.id)) return navigate("/");
 
         setGroupName(data.groupName || "");
         setMembers(data.members);
         setMessages(data.messages);
         setIsGroup(data.isGroup);
       } catch (error) {
-        setErrorMessage(error.message);
+        if (error instanceof Error) {
+          setErrorMessage(error.message);
+        } else {
+          setErrorMessage("An unknown error occurred.");
+        }
       } finally {
         setLoading(false);
       }
@@ -73,7 +78,11 @@ function Chat() {
       if (!response.ok) throw new Error("Failed to rename chat.");
       setIsEditingName(false);
     } catch (error) {
-      setErrorMessage(error.message);
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage("An unknown error occurred.");
+      }
     }
   };
 
@@ -92,8 +101,11 @@ function Chat() {
 
       alert(data.message);
     } catch (error) {
-      console.error("Error leaving chat:", error);
-      setErrorMessage(error.message);
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      } else {
+        setErrorMessage("An error has occurred while leaving the chat.");
+      }
     }
   };
 
@@ -115,7 +127,7 @@ function Chat() {
                   <input
                     className="edit-group"
                     type="text"
-                    maxLength="30"
+                    maxLength={30}
                     value={groupName}
                     onChange={(e) => setGroupName(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleRenameChat()}
@@ -174,15 +186,18 @@ function Chat() {
           {isAddMembersOpen && (
             <AddMembers
               isGroup={isGroup}
-              chatId={chatId}
-              currentMembers={members}
+              chatId={chatId ?? ""}
+              currentMembers={members.map((member) => ({
+                userId: member.userId,
+                username: member.user.username,
+              }))}
               onClose={() => setIsAddMembersOpen(false)}
             />
           )}
 
           <Messages
             messages={messages}
-            chatId={chatId}
+            chatId={chatId ?? ""}
             user={user}
             token={token}
             setMessages={setMessages}

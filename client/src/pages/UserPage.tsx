@@ -5,12 +5,21 @@ import { formatDate } from "../utils/FormatDate";
 import ProfileModal from "../components/ProfileModal";
 import "../styles/UserPage.css";
 
+type UserInfo = {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  profileIcon: string;
+  createdAt: string;
+};
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function UserPage() {
   const { username } = useParams();
   const { user, token, logout } = useAuth();
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [showDeleteForm, setShowDeleteForm] = useState(false);
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -31,7 +40,7 @@ function UserPage() {
     fetchUserInfo();
   }, [username]);
 
-  const handleProfileIconChange = async (icon) => {
+  const handleProfileIconChange = async (icon: string) => {
     if (!user || user.username !== username) return;
 
     try {
@@ -45,7 +54,10 @@ function UserPage() {
       });
 
       if (response.ok) {
-        setUserInfo((prev) => ({ ...prev, profileIcon: icon }));
+        setUserInfo((prev) => {
+          if (!prev) return prev;
+          return { ...prev, profileIcon: icon };
+        });
       } else {
         console.error("Failed to update profile picture.");
       }
@@ -54,7 +66,7 @@ function UserPage() {
     }
   };
 
-  const handleDeleteAccount = async (e) => {
+  const handleDeleteAccount = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!password) {
       setErrorMessage("Enter your password to delete the account.");

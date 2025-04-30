@@ -11,15 +11,15 @@ function Signup() {
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [profileIcon, setProfileIcon] = useState("/profile/default.png");
+  const [profileIcon, setProfileIcon] = useState<string>("/profile/default.png");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleProfileIconChange = (icon) => {
+  const handleProfileIconChange = (icon: string) => {
     setProfileIcon(icon);
   };
 
-  const handleSignup = async (e) => {
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage("");
 
@@ -64,7 +64,7 @@ function Signup() {
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
-          maxLength="30"
+          maxLength={30}
           required
         />
 
@@ -74,7 +74,7 @@ function Signup() {
           type="text"
           value={firstName}
           onChange={(e) => setFirstName(e.target.value)}
-          maxLength="30"
+          maxLength={30}
           required
         />
 
@@ -84,7 +84,7 @@ function Signup() {
           type="text"
           value={lastName}
           onChange={(e) => setLastName(e.target.value)}
-          maxLength="30"
+          maxLength={30}
           required
         />
 

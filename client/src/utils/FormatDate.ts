@@ -1,18 +1,19 @@
-const formatDate = (date) => {
+const monthOptions: Intl.DateTimeFormatOptions = { month: "short" };
+
+const formatDate = (date: Date | string | null | undefined): string => {
   if (!date) return "";
 
   const dateObj = date instanceof Date ? date : new Date(date);
   if (isNaN(dateObj.getTime())) return "";
 
-  const options = { month: "short" };
-  const month = new Intl.DateTimeFormat("en-US", options).format(dateObj);
+  const month = new Intl.DateTimeFormat("en-US", monthOptions).format(dateObj);
   const day = dateObj.getDate();
   const year = dateObj.getFullYear();
 
   return `${month} ${day}, ${year}`;
 };
 
-const formatDateTime = (date) => {
+const formatDateTime = (date: Date | string | null | undefined): string => {
   if (!date) return "";
 
   const dateObj = date instanceof Date ? date : new Date(date);
@@ -31,28 +32,27 @@ const formatDateTime = (date) => {
   if (isSameDay) {
     return `${hours}:${minutes}${ampm}`;
   } else {
-    const options = { month: "short" };
-    const month = new Intl.DateTimeFormat("en-US", options).format(dateObj);
+    const month = new Intl.DateTimeFormat("en-US", monthOptions).format(dateObj);
     const day = dateObj.getDate();
     const year = dateObj.getFullYear();
     return `${month} ${day}, ${year}`;
   }
 };
 
-const updateDateTime = (createdAt, updatedAt) => {
-  if (!createdAt || !updatedAt) return ""; // Handle invalid inputs
+const updateDateTime = (
+  createdAt: Date | string | null | undefined,
+  updatedAt: Date | string | null | undefined
+): string => {
+  if (!createdAt || !updatedAt) return "";
 
-  // Convert to Date objects if they are strings
   const createdDate = createdAt instanceof Date ? createdAt : new Date(createdAt);
   const updatedDate = updatedAt instanceof Date ? updatedAt : new Date(updatedAt);
 
-  // Check if both dates are on the same day
   const isSameDay =
     createdDate.getFullYear() === updatedDate.getFullYear() &&
     createdDate.getMonth() === updatedDate.getMonth() &&
     createdDate.getDate() === updatedDate.getDate();
 
-  // If not the same day, log "hello"
   if (!isSameDay) {
     return `(Last updated ${formatDateTime(updatedAt)})`;
   }

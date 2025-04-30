@@ -24,7 +24,7 @@ function Home() {
             </button>
           )}
 
-          {isAddMembersOpen && (
+          {isAddMembersOpen && user?.id && user?.username && (
             <CreateChat
               currentMembers={[{ userId: user.id, username: user.username }]}
               onClose={() => setIsAddMembersOpen(false)}

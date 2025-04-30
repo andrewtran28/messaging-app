@@ -2,19 +2,30 @@ import { useState, useEffect, useRef } from "react";
 import { formatDateTime } from "../utils/FormatDate";
 import { io } from "socket.io-client";
 
+import type { User, ChatMember, Message } from "../types/models";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const socket = io(API_BASE_URL, { withCredentials: true });
 
-function Messages({ messages, chatId, user, token, setMessages, members }) {
+type MessagesProps = {
+  messages: Message[];
+  chatId: string;
+  user: User | null;
+  token: string | null;
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+  members: ChatMember[];
+};
+
+function Messages({ messages, chatId, user, token, setMessages, members }: MessagesProps) {
   const [newMessage, setNewMessage] = useState("");
-  const [lastReadMessages, setLastReadMessages] = useState({});
-  const messagesContainerRef = useRef(null);
+  const [lastReadMessages, setLastReadMessages] = useState<Record<string, string>>({});
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (user && chatId) socket.emit("join", chatId);
 
-    const handleReceiveMessage = (messageData) => {
-      const formattedMessage = {
+    const handleReceiveMessage = (messageData: any) => {
+      const formattedMessage: Message = {
         id: messageData.id,
         text: messageData.text,
         createdAt: messageData.createdAt,
@@ -22,7 +33,10 @@ function Messages({ messages, chatId, user, token, setMessages, members }) {
           id: messageData.senderId,
           username: messageData.senderUsername,
           profileIcon: messageData.senderProfileIcon,
+          firstName: messageData.senderFirstName,
+          lastName: messageData.senderLastName,
         },
+        senderId: messageData.senderId, // Make sure this is included
         readReceipts: messageData.readReceipts || [],
       };
 
@@ -46,7 +60,8 @@ function Messages({ messages, chatId, user, token, setMessages, members }) {
             headers: { Authorization: `Bearer ${token}` },
           });
         } catch (error) {
-          console.error("Error sending read receipt:", error.message);
+          const err = error as Error;
+          console.error("Error sending read receipt:", err.message);
         }
       };
 
@@ -55,8 +70,8 @@ function Messages({ messages, chatId, user, token, setMessages, members }) {
   }, [messages, chatId, token]);
 
   useEffect(() => {
-    const updatedLastReadMessages = messages.reduce((acc, message) => {
-      message.readReceipts?.forEach((receipt) => {
+    const updatedLastReadMessages = messages.reduce((acc: Record<string, string>, message) => {
+      message.readReceipts?.forEach((receipt: { user: User }) => {
         acc[receipt.user.id] = message.id;
       });
       return acc;
@@ -73,6 +88,7 @@ function Messages({ messages, chatId, user, token, setMessages, members }) {
 
   const handleSendMessage = async () => {
     if (!newMessage.trim()) return;
+    if (!user) return null;
 
     const messageData = {
       senderId: user.id,
@@ -94,7 +110,8 @@ function Messages({ messages, chatId, user, token, setMessages, members }) {
       });
       setNewMessage(""); // Clear input field
     } catch (error) {
-      console.error("Error sending message:", error.message);
+      const err = error as Error;
+      console.error("Error sending message:", err.message);
     }
   };
 
@@ -106,6 +123,8 @@ function Messages({ messages, chatId, user, token, setMessages, members }) {
         ) : (
           <ul>
             {messages.map((message, index) => {
+              if (!user) return null;
+
               const isSender = message.user.id === user.id;
               const isLastMessage = index === messages.length - 1;
               const isLastReadForUser = Object.values(lastReadMessages).includes(message.id);
@@ -152,7 +171,7 @@ function Messages({ messages, chatId, user, token, setMessages, members }) {
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          maxLength="2048"
+          maxLength={2048}
           placeholder="Aa"
           autoComplete="off"
           onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}

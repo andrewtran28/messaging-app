@@ -2,13 +2,27 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 
+type User = {
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+};
+
+type AddMembersProps = {
+  chatId: string;
+  isGroup: boolean;
+  currentMembers: { userId: string; username: string }[];
+  onClose: () => void;
+};
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function AddMembers({ chatId, isGroup, currentMembers, onClose }) {
+function AddMembers({ chatId, isGroup, currentMembers, onClose }: AddMembersProps) {
   const navigate = useNavigate();
   const { token } = useAuth();
-  const [users, setUsers] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -30,7 +44,7 @@ function AddMembers({ chatId, isGroup, currentMembers, onClose }) {
     fetchUsers();
   }, [token]);
 
-  const handleCheckboxChange = (userId) => {
+  const handleCheckboxChange = (userId: string) => {
     setSelectedUsers((prevSelected) =>
       prevSelected.includes(userId) ? prevSelected.filter((id) => id !== userId) : [...prevSelected, userId]
     );
@@ -68,7 +82,11 @@ function AddMembers({ chatId, isGroup, currentMembers, onClose }) {
       isGroup ? window.location.reload() : navigate(`/chat/${data.id}`);
     } catch (error) {
       console.error("Error creating or updating chat:", error);
-      setErrorMessage(error.message || "An error occurred while processing the chat request.");
+      if (error instanceof Error) {
+        setErrorMessage(error.message || "An error occurred while processing the chat request.");
+      } else {
+        setErrorMessage("An unknown error occurred.");
+      }
     }
   };
 

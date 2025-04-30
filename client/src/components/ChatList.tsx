@@ -6,9 +6,26 @@ import "../styles/ChatList.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+type User = {
+  id: string | number;
+  username: string;
+  profileIcon: string;
+};
+
+type Chat = {
+  id: string;
+  isGroup: boolean;
+  chatName: string;
+  members: User[];
+  lastMessage: string | null;
+  lastMessageSender: string | null;
+  lastMessageReadBy: string[];
+  lastMessageAt: string;
+};
+
 function ChatList() {
   const { user, token } = useAuth();
-  const [chats, setChats] = useState([]);
+  const [chats, setChats] = useState<Chat[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -31,7 +48,11 @@ function ChatList() {
         setChats(data);
       } catch (error) {
         console.error("Error fetching chats:", error);
-        setErrorMessage(error.message || "An error occurred while fetching chats.");
+        if (error instanceof Error) {
+          setErrorMessage(error.message || "An error occurred while fetching chats.");
+        } else {
+          setErrorMessage("An unknown error occurred while fetching chats.");
+        }
       } finally {
         setLoading(false);
       }
@@ -40,12 +61,12 @@ function ChatList() {
     fetchChats();
   }, [user, token]);
 
-  const truncateMessage = (message, maxLength = 30) => {
+  const truncateMessage = (message: string | null, maxLength = 30) => {
     if (!message) return "No messages yet";
     return message.length > maxLength ? message.slice(0, maxLength) + "..." : message;
   };
 
-  const truncateName = (name, maxLength = 25) => {
+  const truncateName = (name: string | null, maxLength = 25) => {
     if (!name) return "Unnamed Group";
     return name.length > maxLength ? name.slice(0, maxLength) + "..." : name;
   };
@@ -70,8 +91,10 @@ function ChatList() {
             ) : (
               <ul>
                 {chats.map((chat) => {
-                  const isUnread = chat.lastMessage && !chat.lastMessageReadBy?.includes(user.id);
-                  const otherParticipant = !chat.isGroup ? chat.members.find((member) => member.id !== user.id) : null;
+                  if (!chat) return null;
+
+                  const isUnread = chat.lastMessage && !chat.lastMessageReadBy?.includes(String(user!.id));
+                  const otherParticipant = !chat.isGroup ? chat.members.find((member) => member.id !== user!.id) : null;
 
                   return (
                     <li key={chat.id} className="chat">

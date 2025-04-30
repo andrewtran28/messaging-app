@@ -1,16 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function UsersList({ loading, setLoading }) {
+type UsersListProps = {
+  loading: boolean;
+  setLoading: (value: boolean) => void;
+};
+
+type User = {
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  profileIcon: string;
+};
+
+function UsersList({ loading, setLoading }: UsersListProps) {
   const navigate = useNavigate();
   const { user, token } = useAuth();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [hoveredUser, setHoveredUser] = useState(null);
+  const [hoveredUser, setHoveredUser] = useState<string | null>(null);
   const [showDelayedMessage, setShowDelayedMessage] = useState(false);
 
   useEffect(() => {
@@ -23,9 +36,13 @@ function UsersList({ loading, setLoading }) {
         const data = await response.json();
         if (!response.ok) throw new Error(data.message || "Failed to fetch users.");
         setUsers(data);
-      } catch (error) {
+      } catch (error: unknown) {
         console.error("Error fetching users:", error);
-        setErrorMessage(error.message || "An error occurred while fetching users.");
+        if (error instanceof Error) {
+          setErrorMessage(error.message || "An error occurred while fetching users.");
+        } else {
+          setErrorMessage("An unknown error occurred while fetching users.");
+        }
       } finally {
         setLoading(false);
       }
@@ -35,9 +52,9 @@ function UsersList({ loading, setLoading }) {
     return () => clearTimeout(timer);
   }, []);
 
-  const handleSearchChange = (e) => setSearchTerm(e.target.value.toLowerCase());
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value.toLowerCase());
 
-  const handleChat = async (otherUserId) => {
+  const handleChat = async (otherUserId: string) => {
     if (!user || !token) return setErrorMessage("You must be logged in to start a chat.");
 
     try {
@@ -51,26 +68,34 @@ function UsersList({ loading, setLoading }) {
       if (!response.ok) throw new Error(data.message || "Failed to check chat existence.");
 
       navigate(`/chat/${data.chatId || (await createChat(otherUserId))}`);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Chat error:", error);
-      setErrorMessage(error.message || "An error occurred while starting a chat.");
+      if (error instanceof Error) {
+        setErrorMessage(error.message || "An error occurred while starting a chat.");
+      } else {
+        setErrorMessage("An unknown error occurred while starting a chat.");
+      }
     }
   };
 
-  const createChat = async (otherUserId) => {
+  const createChat = async (otherUserId: string) => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ userIds: [user.id, otherUserId] }),
+        body: JSON.stringify({ userIds: [user?.id, otherUserId] }),
       });
 
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Failed to create chat.");
       return data.id;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error creating chat:", error);
-      setErrorMessage(error.message || "An error occurred while creating a chat.");
+      if (error instanceof Error) {
+        setErrorMessage(error.message || "An error occurred while creating a chat.");
+      } else {
+        setErrorMessage("An unknown error occurred while creating a chat.");
+      }
       return null;
     }
   };

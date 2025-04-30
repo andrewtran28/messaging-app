@@ -12,7 +12,7 @@ function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage("");
 
@@ -43,10 +43,10 @@ function Login() {
     <div id="login">
       <h1 id="title">Log In</h1>
       <form onSubmit={handleLogin}>
-        <label name="username">Username: </label>
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength="30" required />
+        <label htmlFor="username">Username: </label>
+        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} maxLength={30} required />
 
-        <label name="password"> Password: </label>
+        <label htmlFor="password"> Password: </label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <br />
         {errorMessage && (
