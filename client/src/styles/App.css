@@ -35,7 +35,7 @@ main {
 
 section,
 #page-layout {
-  height: calc(100vh - 185px);
+  min-height: max(300px, calc(100vh - 185px));
 }
 
 #page-layout {
@@ -66,10 +66,6 @@ button {
   margin: 0 5px;
   transition: 0.15s ease-in-out;
   cursor: pointer;
-
-  -webkit-user-select: none; /* Safari */
-  -ms-user-select: none; /* IE 10 and IE 11 */
-  user-select: none; /* Standard syntax */
 }
 button:hover {
   background-color: #49b5c6;
@@ -148,6 +144,35 @@ button:disabled {
   line-height: 2rem;
   padding-left: 10px;
   margin: 10px 0;
+}
+
+.loading-wrapper {
+  position: absolute;
+  top: max(100px, calc(50% - 2rem));
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.loading {
+  font-size: 2rem;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.load-animation {
+  color: transparent;
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect fill="%232779a7" stroke="%232779a7" stroke-width="10" width="30" height="30" x="25" y="85"><animate attributeName="opacity" calcMode="spline" dur="3" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></rect><rect fill="%232779a7" stroke="%232779a7" stroke-width="10" width="30" height="30" x="85" y="85"><animate attributeName="opacity" calcMode="spline" dur="3" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate></rect><rect fill="%232779a7" stroke="%232779a7" stroke-width="10" width="30" height="30" x="145" y="85"><animate attributeName="opacity" calcMode="spline" dur="3" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></rect></svg>');
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+}
+
+button,
+.loading {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 @media (max-width: 1200px) {

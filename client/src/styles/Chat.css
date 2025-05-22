@@ -16,11 +16,6 @@
   padding: 0 10px;
 }
 
-.chat-cont {
-  position: relative;
-  color: var(--font-light);
-}
-
 .chat-cont p {
   color: gray;
   font-style: oblique;
@@ -42,11 +37,15 @@
   align-items: center;
   font-size: 1.5rem;
   padding: 10px 0;
+  color: var(--font-light);
 }
 
 .chat-profile {
   height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 50%;
   margin-right: 10px;
+  background-color: gray;
 }
 
 .chat-full-name {

@@ -111,7 +111,36 @@ function Chat() {
 
   if (!user || !token) return null;
   const otherMembers = members.filter((member) => member.userId !== user.id);
-  if (loading) return <p>Loading chat...</p>;
+  if (loading) {
+    return (
+      <>
+        <div id="chat-page">
+          <ChatList />
+
+          <div id="page-layout">
+            <div className="chat-cont">
+              <div className="chat-header">
+                <div className="chat-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <h1>
+                    <span className="chat-profile"></span>
+                    ████████████
+                    <span className="chat-full-name">██████████</span>
+                  </h1>
+                </div>
+              </div>
+              <div className="loading-wrapper">
+                <div className="loading">
+                  <span>Loading Messages</span>
+                  <span className="load-animation">...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   if (errorMessage) return <p>{errorMessage}</p>;
 
   return (

@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, useMemo, ChangeEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 
@@ -25,9 +25,11 @@ function UsersList({ loading, setLoading }: UsersListProps) {
   const [errorMessage, setErrorMessage] = useState("");
   const [hoveredUser, setHoveredUser] = useState<string | null>(null);
   const [showDelayedMessage, setShowDelayedMessage] = useState(false);
+  const [showLoading, setShowLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowDelayedMessage(true), 3000);
+    const showLoadingTimer = setTimeout(() => setShowLoading(true), 1000);
+    const delayedMsgTimer = setTimeout(() => setShowDelayedMessage(true), 3000);
 
     const fetchUsers = async () => {
       try {
@@ -45,11 +47,17 @@ function UsersList({ loading, setLoading }: UsersListProps) {
         }
       } finally {
         setLoading(false);
+        setShowLoading(false);
+        setShowDelayedMessage(false);
       }
     };
 
     fetchUsers();
-    return () => clearTimeout(timer);
+
+    return () => {
+      clearTimeout(showLoadingTimer);
+      clearTimeout(delayedMsgTimer);
+    };
   }, []);
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value.toLowerCase());
@@ -100,68 +108,82 @@ function UsersList({ loading, setLoading }: UsersListProps) {
     }
   };
 
-  const filteredUsers = users.filter(
-    (u) =>
-      u.username.toLowerCase().includes(searchTerm) ||
-      u.firstName.toLowerCase().includes(searchTerm) ||
-      u.lastName.toLowerCase().includes(searchTerm)
-  );
+  const filteredUsers = useMemo(() => {
+    return users.filter(
+      (u) =>
+        u.username.toLowerCase().includes(searchTerm) ||
+        u.firstName.toLowerCase().includes(searchTerm) ||
+        u.lastName.toLowerCase().includes(searchTerm)
+    );
+  }, [users, searchTerm]);
+
+  if (loading) {
+    return (
+      <section id="userlist-cont">
+        <h2>User Directory</h2>
+        <div className="loading-wrapper">
+          <div className="loading">
+            {showLoading && (
+              <p>
+                <span>Loading Users</span>
+                <span className="load-animation">...</span>
+              </p>
+            )}
+          </div>
+          {showDelayedMessage && <p>(This may take up to 30 seconds due to slow servers.)</p>}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="userlist-cont">
       <h2>User Directory</h2>
-      {loading ? (
-        <>
-          <p>Loading users...</p>
-          {showDelayedMessage && <p>(This may take up to 30 seconds due to slow servers.)</p>}
-        </>
-      ) : (
-        <>
-          <input
-            className="user-search"
-            type="text"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            placeholder="Search by username"
-          />
+      <>
+        <input
+          className="user-search"
+          type="text"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          placeholder="Search by username"
+        />
 
-          {errorMessage && (
-            <p className="error" style={{ color: "red" }}>
-              {errorMessage}
-            </p>
-          )}
+        {errorMessage && (
+          <p className="error" style={{ color: "red" }}>
+            {errorMessage}
+          </p>
+        )}
 
-          <div className="user-list">
-            {filteredUsers.length === 0 ? (
-              <p>No users found.</p>
-            ) : (
-              filteredUsers.map((u) => (
-                <div
-                  key={u.id}
-                  className="user"
-                  onMouseEnter={() => setHoveredUser(u.id)}
-                  onMouseLeave={() => setHoveredUser(null)}
-                >
-                  <div className="user-cont">
-                    <img className="user-profile" src={u.profileIcon} />
-                    <span className="username">
-                      <Link to={`/user/${u.username}`}>{u.username}</Link>
-                    </span>
-                    <span className="full-name">
-                      ({u.firstName} {u.lastName})
-                    </span>
-                  </div>
-                  {user && user.id !== u.id && hoveredUser === u.id && (
-                    <button className="user-chat-btn" onClick={() => handleChat(u.id)}>
-                      Chat
-                    </button>
-                  )}
+        <div className="user-list">
+          {filteredUsers.length === 0 ? (
+            <p>No users found.</p>
+          ) : (
+            filteredUsers.map((u) => (
+              <div
+                key={u.id}
+                className="user"
+                onMouseEnter={() => setHoveredUser(u.id)}
+                onMouseLeave={() => setHoveredUser(null)}
+              >
+                <div className="user-cont">
+                  <img className="user-profile" src={u.profileIcon} />
+                  <span className="username">
+                    <Link to={`/user/${u.username}`}>{u.username}</Link>
+                  </span>
+                  <span className="full-name">
+                    ({u.firstName} {u.lastName})
+                  </span>
                 </div>
-              ))
-            )}
-          </div>
-        </>
-      )}
+                {user && user.id !== u.id && hoveredUser === u.id && (
+                  <button className="user-chat-btn" onClick={() => handleChat(u.id)}>
+                    Chat
+                  </button>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      </>
     </section>
   );
 }

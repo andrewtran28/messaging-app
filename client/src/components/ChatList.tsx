@@ -76,7 +76,12 @@ function ChatList() {
       <h2>Your Chats</h2>
 
       {loading ? (
-        <p className="no-chats">Loading chats...</p>
+        <div className="loading-wrapper">
+          <div className="loading">
+            <span>Loading Chats</span>
+            <span className="load-animation">...</span>
+          </div>
+        </div>
       ) : (
         <>
           {errorMessage && (

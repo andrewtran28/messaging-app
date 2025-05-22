@@ -53,7 +53,7 @@ function Signup() {
   };
 
   return (
-    <div id="login">
+    <div id="signup">
       <h1 id="title">Sign Up</h1>
       <form onSubmit={handleSignup}>
         <ProfileModal profileIcon={profileIcon} handleProfileIconChange={handleProfileIconChange} />

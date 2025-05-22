@@ -1,4 +1,5 @@
-#login {
+#login,
+#signup {
   border-radius: 2rem;
   background-color: var(--container);
   display: flex;
@@ -8,13 +9,17 @@
   width: 100%;
   padding: 0 0 30px 0;
   font-size: 1.25rem;
-  height: fit-content;
   margin: 0 20px 20px 20px;
-  min-height: calc(100vh - 200px);
+  min-height: max(350px, calc(100vh - 200px));
   position: relative;
 }
 
-#login h1 {
+#signup {
+  min-height: min(750px, calc(100vh - 200px));
+}
+
+#login h1,
+#signup h1 {
   display: flex;
   justify-content: center;
   font-size: 3rem;
@@ -27,7 +32,8 @@
   padding: 15px 0;
 }
 
-#login input {
+#login input,
+#signup input {
   font-size: inherit;
   font-family: inherit;
   margin-bottom: 20px;
@@ -38,7 +44,8 @@
   line-height: 2.5rem;
 }
 
-#login label {
+#login label,
+#signup label {
   display: flex;
 }
 
