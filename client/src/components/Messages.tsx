@@ -19,6 +19,7 @@ type MessagesProps = {
 function Messages({ messages, chatId, user, token, setMessages, members }: MessagesProps) {
   const [newMessage, setNewMessage] = useState("");
   const [lastReadMessages, setLastReadMessages] = useState<Record<string, string>>({});
+  const [sending, setSending] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -87,8 +88,11 @@ function Messages({ messages, chatId, user, token, setMessages, members }: Messa
   }, [messages]);
 
   const handleSendMessage = async () => {
+    if (sending) return; // Prevent sending while already sending
     if (!newMessage.trim()) return;
-    if (!user) return null;
+    if (!user) return;
+
+    setSending(true);
 
     const messageData = {
       senderId: user.id,
@@ -108,10 +112,12 @@ function Messages({ messages, chatId, user, token, setMessages, members }: Messa
         },
         body: JSON.stringify({ userId: user.id, text: newMessage.trim() }),
       });
-      setNewMessage(""); // Clear input field
+      setNewMessage(""); // Clear input field after successful send
     } catch (error) {
       const err = error as Error;
       console.error("Error sending message:", err.message);
+    } finally {
+      setSending(false);
     }
   };
 
@@ -176,7 +182,7 @@ function Messages({ messages, chatId, user, token, setMessages, members }: Messa
           autoComplete="off"
           onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
         />
-        <button id="btn-send" onClick={handleSendMessage}>
+        <button id="btn-send" onClick={handleSendMessage} disabled={sending || !newMessage.trim()}>
           Send
         </button>
       </div>
