@@ -64,6 +64,10 @@
   margin-bottom: 20px;
 }
 
+.profile-icon {
+  place-self: center;
+}
+
 .modal-content {
   background-color: var(--container);
   padding: 20px;

@@ -23,6 +23,7 @@ function Chat() {
   const [members, setMembers] = useState<ChatMember[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isEditingName, setIsEditingName] = useState(false);
   const [isAddMembersOpen, setIsAddMembersOpen] = useState(false);
@@ -35,6 +36,8 @@ function Chat() {
       navigate("/login");
       return;
     }
+
+    const showLoadingTimer = setTimeout(() => setShowLoading(true), 1000);
 
     const fetchChat = async () => {
       try {
@@ -58,10 +61,12 @@ function Chat() {
         }
       } finally {
         setLoading(false);
+        setShowLoading(false);
       }
     };
 
     fetchChat();
+    return () => clearTimeout(showLoadingTimer);
   }, [chatId, token, user, navigate]);
 
   const handleRenameChat = async () => {
@@ -111,6 +116,7 @@ function Chat() {
 
   if (!user || !token) return null;
   const otherMembers = members.filter((member) => member.userId !== user.id);
+
   if (loading) {
     return (
       <>
@@ -123,17 +129,19 @@ function Chat() {
                 <div className="chat-title" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                   <h1>
                     <span className="chat-profile"></span>
-                    ████████████
-                    <span className="chat-full-name">██████████</span>
+                    ██████████
+                    <span className="chat-full-name">████████</span>
                   </h1>
                 </div>
               </div>
-              <div className="loading-wrapper">
-                <div className="loading">
-                  <span>Loading Messages</span>
-                  <span className="load-animation">...</span>
+              {showLoading && (
+                <div className="loading-wrapper">
+                  <div className="loading">
+                    <span>Loading Messages</span>
+                    <span className="load-animation">...</span>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

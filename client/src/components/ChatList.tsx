@@ -28,6 +28,7 @@ function ChatList() {
   const [chats, setChats] = useState<Chat[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
 
   useEffect(() => {
     if (!user || !token) {
@@ -35,6 +36,8 @@ function ChatList() {
       setLoading(false);
       return;
     }
+
+    const showLoadingTimer = setTimeout(() => setShowLoading(true), 1000);
 
     const fetchChats = async () => {
       try {
@@ -55,10 +58,12 @@ function ChatList() {
         }
       } finally {
         setLoading(false);
+        setShowLoading(false);
       }
     };
 
     fetchChats();
+    return () => clearTimeout(showLoadingTimer);
   }, [user, token]);
 
   const truncateMessage = (message: string | null, maxLength = 30) => {
@@ -71,66 +76,74 @@ function ChatList() {
     return name.length > maxLength ? name.slice(0, maxLength) + "..." : name;
   };
 
+  if (loading) {
+    return (
+      <>
+        <section className="chatlist">
+          <h2>Your Chats</h2>
+          {showLoading && (
+            <>
+              <div className="loading-wrapper">
+                <div className="loading">
+                  <span>Loading Chats</span>
+                  <span className="load-animation">...</span>
+                </div>
+              </div>
+            </>
+          )}
+        </section>
+      </>
+    );
+  }
+
   return (
     <section className="chatlist">
       <h2>Your Chats</h2>
-
-      {loading ? (
-        <div className="loading-wrapper">
-          <div className="loading">
-            <span>Loading Chats</span>
-            <span className="load-animation">...</span>
-          </div>
-        </div>
-      ) : (
-        <>
-          {errorMessage && (
-            <p className="error" style={{ color: "red" }}>
-              {errorMessage}
-            </p>
-          )}
-
-          <div className="chats">
-            {chats.length === 0 ? (
-              <p className="no-chats">You have no active chats.</p>
-            ) : (
-              <ul>
-                {chats.map((chat) => {
-                  if (!chat) return null;
-
-                  const isUnread = chat.lastMessage && !chat.lastMessageReadBy?.includes(String(user!.id));
-                  const otherParticipant = !chat.isGroup ? chat.members.find((member) => member.id !== user!.id) : null;
-
-                  return (
-                    <li key={chat.id} className="chat">
-                      {!chat.isGroup && otherParticipant ? (
-                        <img className="chatlist-profile" src={otherParticipant.profileIcon} />
-                      ) : (
-                        <img className="chatlist-profile" src={"/profile/group-chat.png"} />
-                      )}
-                      <div className="chat-info">
-                        <Link to={`/chat/${chat.id}`}>
-                          <span className="chat-name">
-                            {chat.isGroup ? truncateName(chat.chatName) : otherParticipant?.username || "Unnamed Chat"}
-                          </span>
-                        </Link>
-                        <p
-                          className="chat-preview"
-                          style={{ color: isUnread ? "black" : "inherit", fontWeight: isUnread ? "600" : "400" }}
-                        >
-                          {chat.lastMessageSender && `${chat.lastMessageSender}: `}
-                          {truncateMessage(chat.lastMessage)}
-                        </p>
-                      </div>
-                      <span className="timestamp">{formatDateTime(chat.lastMessageAt)}</span>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </div>
-        </>
+      {errorMessage && (
+        <p className="error" style={{ color: "red" }}>
+          {errorMessage}
+        </p>
       )}
+
+      <div className="chats">
+        {chats.length === 0 ? (
+          <p className="no-chats">You have no active chats.</p>
+        ) : (
+          <ul>
+            {chats.map((chat) => {
+              if (!chat) return null;
+
+              const isUnread = chat.lastMessage && !chat.lastMessageReadBy?.includes(String(user!.id));
+              const otherParticipant = !chat.isGroup ? chat.members.find((member) => member.id !== user!.id) : null;
+
+              return (
+                <li key={chat.id} className="chat">
+                  {!chat.isGroup && otherParticipant ? (
+                    <img className="chatlist-profile" src={otherParticipant.profileIcon} />
+                  ) : (
+                    <img className="chatlist-profile" src={"/profile/group-chat.png"} />
+                  )}
+                  <div className="chat-info">
+                    <Link to={`/chat/${chat.id}`}>
+                      <span className="chat-name">
+                        {chat.isGroup ? truncateName(chat.chatName) : otherParticipant?.username || "Unnamed Chat"}
+                      </span>
+                    </Link>
+                    <p
+                      className="chat-preview"
+                      style={{ color: isUnread ? "black" : "inherit", fontWeight: isUnread ? "600" : "400" }}
+                    >
+                      {chat.lastMessageSender && `${chat.lastMessageSender}: `}
+                      {truncateMessage(chat.lastMessage)}
+                    </p>
+                  </div>
+                  <span className="timestamp">{formatDateTime(chat.lastMessageAt)}</span>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
     </section>
   );
 }

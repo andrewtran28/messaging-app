@@ -24,8 +24,10 @@ function UserPage() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+  const [showLoading, setShowLoading] = useState(false);
 
   useEffect(() => {
+    const loadingTimer = setTimeout(() => setShowLoading(true), 1000);
     const fetchUserInfo = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/users/${username}`);
@@ -38,6 +40,7 @@ function UserPage() {
     };
 
     fetchUserInfo();
+    return () => clearTimeout(loadingTimer);
   }, [username]);
 
   const handleProfileIconChange = async (icon: string) => {
@@ -163,7 +166,19 @@ function UserPage() {
           )}
         </>
       ) : (
-        <p className="loading-message">{errorMessage || "Loading user info..."}</p>
+        <>
+          <h1 style={{ color: "transparent" }}>User Page</h1>
+          {showLoading && (
+            <p className="loading-message">
+              {errorMessage || (
+                <>
+                  <span>Loading user info </span>
+                  <span className="load-animation">...</span>
+                </>
+              )}
+            </p>
+          )}
+        </>
       )}
     </div>
   );
